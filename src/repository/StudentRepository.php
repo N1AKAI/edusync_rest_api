@@ -183,8 +183,8 @@ class StudentRepository
   {
     $stmt = $this->con->prepare("SELECT class_id,
     student_id, first_name, last_name, phone_number,
-    fathers_name, mothers_name, join_date, email,
-    class_name, class_year, teacher_id
+    fathers_name, mothers_name, join_date, email, avatar,
+    class_name, class_year, teacher_id, date_of_birth
     FROM student  INNER JOIN class_student
     USING(student_id) INNER JOIN class
     using(class_id) WHERE student.email = ?

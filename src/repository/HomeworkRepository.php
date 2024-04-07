@@ -24,7 +24,8 @@ class HomeworkRepository
     INNER JOIN class_student USING (class_id)
     LEFT JOIN 
     student_homework ON homework.homework_id = student_homework.homework_id AND class_student.student_id = student_homework.student_id
-    WHERE class_student.student_id = ?");
+    WHERE class_student.student_id = ?
+    ORDER BY homework.homework_id DESC");
     $stmt->bind_param("i", $student_id);
     $stmt->execute();
     $result = $stmt->get_result();

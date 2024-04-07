@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Apr 07, 2024 at 01:16 PM
+-- Generation Time: Apr 08, 2024 at 01:22 AM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.2.12
 
@@ -153,10 +153,10 @@ CREATE TABLE `course` (
 --
 
 INSERT INTO `course` (`course_id`, `course_name`, `course_code`, `created_at`, `updated_at`) VALUES
-(1, 'Java', '125', '2023-09-30 14:12:10', NULL),
-(2, 'Exel', '209', NULL, NULL),
-(3, 'Entreprenariat', '101', '2023-10-10 13:10:07', NULL),
-(4, 'Anglais', '103', NULL, NULL);
+(1, 'Bases du développement android', 'M201', '2023-09-30 14:12:10', NULL),
+(2, 'Exel', 'M208', NULL, NULL),
+(3, 'Entreprenariat', 'M103', '2023-10-10 13:10:07', NULL),
+(4, 'Anglais', 'M205', NULL, NULL);
 
 -- --------------------------------------------------------
 
@@ -226,7 +226,14 @@ CREATE TABLE `homework` (
 INSERT INTO `homework` (`homework_id`, `class_id`, `teacher_id`, `course_id`, `homework`, `created_at`, `updated_at`) VALUES
 (1, 1, 1, 4, 'Exercice', '2024-04-06 12:17:21', NULL),
 (2, 2, 3, 1, 'Tp en poo', '2024-04-06 12:17:21', NULL),
-(3, 4, 4, 3, 'Trouver un entrepreneur', '2024-04-06 12:17:21', NULL);
+(3, 4, 4, 3, 'Trouver un entrepreneur', '2024-04-06 12:17:21', NULL),
+(16, 1, 11, 4, 'Creative Writing', '2024-04-07 14:17:48', NULL),
+(17, 1, 11, 4, 'Grammar and Vocabulary', '2024-04-07 14:17:48', NULL),
+(18, 1, 11, 4, 'Research and Report', '2024-04-07 14:17:48', NULL),
+(19, 1, 13, 1, 'Basic Java Program', '2024-04-07 14:17:48', NULL),
+(20, 1, 13, 1, 'Java Loops and Conditionals', '2024-04-07 14:17:48', NULL),
+(21, 1, 13, 1, 'Polymorphisme', '2024-04-07 20:28:39', NULL),
+(22, 1, 13, 1, 'Exception and Try/Catch', '2024-04-07 20:28:39', NULL);
 
 -- --------------------------------------------------------
 
@@ -328,12 +335,14 @@ CREATE TABLE `student` (
   `student_id` int(11) NOT NULL,
   `first_name` varchar(255) NOT NULL,
   `last_name` varchar(255) NOT NULL,
+  `date_of_birth` date DEFAULT NULL,
   `phone_number` varchar(255) NOT NULL,
   `fathers_name` varchar(255) NOT NULL,
   `mothers_name` varchar(255) NOT NULL,
   `join_date` date NOT NULL,
   `email` varchar(255) NOT NULL,
   `password` varchar(255) NOT NULL,
+  `avatar` varchar(255) DEFAULT NULL,
   `otp` varchar(255) NOT NULL,
   `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
   `updated_at` timestamp NOT NULL DEFAULT current_timestamp()
@@ -343,12 +352,12 @@ CREATE TABLE `student` (
 -- Dumping data for table `student`
 --
 
-INSERT INTO `student` (`student_id`, `first_name`, `last_name`, `phone_number`, `fathers_name`, `mothers_name`, `join_date`, `email`, `password`, `otp`, `created_at`, `updated_at`) VALUES
-(1, 'Fatima Ezzahra', 'Baba', '0775729368', 'Rachid', 'Karima', '2023-10-03', 'babafatimaezzahra434@gmail.com', 'baba@babafz', 'OTkzNjY=', '2023-10-04 11:58:48', '2023-10-04 11:58:48'),
-(2, 'Saad', 'Aboulhoda', '0671670183', 'Mohammed', 'Fatima', '2023-09-21', 'rakansubs@gmail.com', '$2y$10$KpKQXrszRJeqmDL4e6G9Mu5dZQEqXzR2BvlRzc7uBQxJhCb7dit9m', 'NzgyNjU=', '2023-09-21 12:03:22', '2024-02-05 11:03:22'),
-(3, 'Hamza', 'El Hourch', '062901625', 'Ahmed', 'Fatima', '2023-11-01', 'elhorchhamza@gmail.com', 'hamza@hamza', 'OTkzNjY=', '2023-11-01 12:07:48', '2024-03-29 15:07:48'),
-(4, 'Halima', 'Bezaz', '0613060106', 'Hassan', 'Amina', '2023-10-10', 'bzazhalima@gmail.com', 'halima@hailma', 'OTkzNjY=', '2023-10-10 12:10:07', '2023-12-02 09:10:07'),
-(5, 'Kawter', 'El Azrak', '0603848212', 'Amin', 'Naziha', '2023-09-30', 'elazrakkawter@gmail.com', 'kawter@kawter', 'OTkzNjY=', '2023-09-30 13:12:10', '2024-03-03 12:12:10');
+INSERT INTO `student` (`student_id`, `first_name`, `last_name`, `date_of_birth`, `phone_number`, `fathers_name`, `mothers_name`, `join_date`, `email`, `password`, `avatar`, `otp`, `created_at`, `updated_at`) VALUES
+(1, 'Fatima Ezzahra', 'Baba', '2004-10-19', '0775729368', 'Rachid', 'Karima', '2023-10-03', 'babafatimaezzahra434@gmail.com', 'baba@babafz', NULL, 'OTkzNjY=', '2023-10-04 11:58:48', '2023-10-04 11:58:48'),
+(2, 'Saad', 'Aboulhoda', '2003-01-30', '0671670183', 'Miloud', 'Fatima', '2023-09-21', 'rakansubs@gmail.com', '$2y$10$35rpUykdP9HzXIUoEWcQfuUVpdSryL4AU3RWB/3ST0Ag/1Y2voWFS', NULL, '', '2023-09-21 12:03:22', '2024-02-05 11:03:22'),
+(3, 'Hamza', 'El Hourch', NULL, '062901625', 'Ahmed', 'Fatima', '2023-11-01', 'elhorchhamza@gmail.com', 'hamza@hamza', NULL, 'OTkzNjY=', '2023-11-01 12:07:48', '2024-03-29 15:07:48'),
+(4, 'Halima', 'Bezaz', NULL, '0613060106', 'Hassan', 'Amina', '2023-10-10', 'bzazhalima@gmail.com', 'halima@hailma', NULL, 'OTkzNjY=', '2023-10-10 12:10:07', '2023-12-02 09:10:07'),
+(5, 'Kawter', 'El Azrak', NULL, '0603848212', 'Amin', 'Naziha', '2023-09-30', 'elazrakkawter@gmail.com', 'kawter@kawter', NULL, 'OTkzNjY=', '2023-09-30 13:12:10', '2024-03-03 12:12:10');
 
 -- --------------------------------------------------------
 
@@ -367,7 +376,10 @@ CREATE TABLE `student_homework` (
 --
 
 INSERT INTO `student_homework` (`student_homework`, `homework_id`, `student_id`) VALUES
-(2, 1, 2);
+(2, 1, 2),
+(3, 20, 2),
+(4, 18, 2),
+(5, 19, 2);
 
 -- --------------------------------------------------------
 
@@ -432,10 +444,11 @@ CREATE TABLE `test` (
 --
 
 INSERT INTO `test` (`test_id`, `test_code`, `mark`, `student_id`, `course_id`, `created_at`, `updated_at`) VALUES
-(1, '123GE', 19, 2, 1, '2024-04-06 11:56:23', NULL),
-(2, '123GE', 19.5, 2, 1, '2024-04-06 11:56:23', NULL),
-(3, '90NM', 19, 1, 2, '2024-04-06 11:56:23', NULL),
-(4, '189SK', 18.5, 2, 4, '2024-04-06 11:56:23', NULL);
+(1, 'CC2', 18, 2, 4, '2024-04-04 14:07:42', NULL),
+(2, 'CC1', 19, 2, 1, '2024-04-06 11:56:23', NULL),
+(3, 'CC2', 19.5, 2, 1, '2024-04-06 11:56:23', NULL),
+(4, 'CC3', 19, 1, 2, '2024-04-06 11:56:23', NULL),
+(5, 'EFM', 38, 2, 4, '2024-04-06 11:56:23', NULL);
 
 -- --------------------------------------------------------
 
@@ -638,7 +651,7 @@ ALTER TABLE `holiday`
 -- AUTO_INCREMENT for table `homework`
 --
 ALTER TABLE `homework`
-  MODIFY `homework_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `homework_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=23;
 
 --
 -- AUTO_INCREMENT for table `multimedia`
@@ -674,7 +687,7 @@ ALTER TABLE `student`
 -- AUTO_INCREMENT for table `student_homework`
 --
 ALTER TABLE `student_homework`
-  MODIFY `student_homework` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `student_homework` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 
 --
 -- AUTO_INCREMENT for table `teacher`
@@ -686,7 +699,7 @@ ALTER TABLE `teacher`
 -- AUTO_INCREMENT for table `test`
 --
 ALTER TABLE `test`
-  MODIFY `test_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+  MODIFY `test_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
 
 --
 -- AUTO_INCREMENT for table `test_online`
