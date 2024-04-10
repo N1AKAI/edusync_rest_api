@@ -1,6 +1,7 @@
 <?php
 
 use App\Lib\JWTAuth;
+use App\Repository\AttendanceRepository;
 use App\Repository\ClassRepository;
 use App\Repository\HomeworkRepository;
 use App\Repository\StudentRepository;
@@ -43,12 +44,25 @@ $app->get("/student/homeworks", function (Request $request, Response $response, 
   $token = str_replace("Bearer ", "", $request->getHeaderLine('Authorization'));
   $data = JWTAuth::getData($token);
 
-  $repo = new ClassRepository();
-
   $repo = new HomeworkRepository();
   $homeworks = $repo->getAllHomeWorkByStudent($data->id);
 
   $response->getBody()->write(json_encode($homeworks));
+
+  return $response
+    ->withHeader('Content-type', 'application/json')
+    ->withStatus(200);
+});
+
+$app->get("/student/attendances", function (Request $request, Response $response, array $args) {
+
+  $token = str_replace("Bearer ", "", $request->getHeaderLine('Authorization'));
+  $data = JWTAuth::getData($token);
+
+  $repo = new AttendanceRepository();
+  $attendances = $repo->getStudentsAttendace($data->id);
+
+  $response->getBody()->write(json_encode($attendances));
 
   return $response
     ->withHeader('Content-type', 'application/json')
