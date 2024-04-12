@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Apr 08, 2024 at 01:22 AM
+-- Generation Time: Apr 12, 2024 at 10:04 PM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.2.12
 
@@ -24,11 +24,36 @@ SET time_zone = "+00:00";
 -- --------------------------------------------------------
 
 --
+-- Table structure for table `admin`
+--
+
+CREATE TABLE `admin` (
+  `admin_id` int(11) NOT NULL,
+  `first_name` varchar(255) NOT NULL,
+  `last_name` varchar(255) NOT NULL,
+  `email` varchar(255) NOT NULL,
+  `password` varchar(255) NOT NULL,
+  `forget_password_token` varchar(255) DEFAULT NULL,
+  `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
+  `updated_at` timestamp NULL DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `admin`
+--
+
+INSERT INTO `admin` (`admin_id`, `first_name`, `last_name`, `email`, `password`, `forget_password_token`, `created_at`, `updated_at`) VALUES
+(1, 'MILOUD', 'ABOULHODA', 'rakansubs@gmail.com', '$2y$10$399FgPWRkDBmtbZGUvr3UOABw6RymjJuJhARQPY8dTrebOSXPijxu', NULL, '2024-04-09 10:11:03', NULL);
+
+-- --------------------------------------------------------
+
+--
 -- Table structure for table `answer`
 --
 
 CREATE TABLE `answer` (
   `answer_id` int(11) NOT NULL,
+  `answer` varchar(255) NOT NULL,
   `is_correct` tinyint(4) DEFAULT 0,
   `question_id` int(11) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
@@ -37,10 +62,39 @@ CREATE TABLE `answer` (
 -- Dumping data for table `answer`
 --
 
-INSERT INTO `answer` (`answer_id`, `is_correct`, `question_id`) VALUES
-(1, 25, 1),
-(2, 13, 2),
-(3, 22, 3);
+INSERT INTO `answer` (`answer_id`, `answer`, `is_correct`, `question_id`) VALUES
+(1, '11', 0, 1),
+(2, '12', 0, 1),
+(3, '13', 1, 1),
+(4, '14', 0, 1),
+(5, 'Interfaces can contain constructors.', 0, 2),
+(6, 'A class can implement multiple interfaces with the same method names but different implementations.', 1, 2),
+(7, 'Interface methods are by default final and static.', 0, 2),
+(8, 'Interfaces can have instance variables.', 0, 2),
+(9, 'final int CONSTANT_VAR = 10;', 0, 3),
+(10, 'constant int CONSTANT_VAR = 10;', 0, 3),
+(11, 'static int CONSTANT_VAR = 10;', 0, 3),
+(12, 'final static int CONSTANT_VAR = 10;', 1, 3),
+(13, 'It refers to the current class instance.', 0, 4),
+(14, 'It is used to access the superclass members.', 1, 4),
+(15, 'It is used to create a new instance of a class.', 0, 4),
+(16, 'It is used to declare a class as a superclass.', 0, 4),
+(17, 'true', 0, 5),
+(18, 'false', 1, 5),
+(19, 'Compilation Error', 0, 5),
+(20, 'Runtime Error', 0, 5),
+(21, 'ArrayList', 0, 6),
+(22, 'LinkedList', 0, 6),
+(23, 'HashMap', 1, 6),
+(24, 'TreeSet', 0, 6),
+(25, 'Terminates the loop or switch statement and transfers execution to the statement immediately following the loop or switch.', 1, 7),
+(26, 'Skips the current iteration of a loop and continues with the next iteration.', 0, 7),
+(27, 'Jumps to a labeled statement in the current method.', 0, 7),
+(28, 'Throws an exception and terminates the program.', 0, 7),
+(29, 'Threads are lightweight processes that share the same memory space.', 1, 8),
+(30, 'Java doesn\'t support multithreading.', 0, 8),
+(31, 'A thread cannot be created by implementing the Runnable interface.', 0, 8),
+(32, 'Threads always execute in parallel.', 0, 8);
 
 -- --------------------------------------------------------
 
@@ -70,15 +124,58 @@ INSERT INTO `attendance` (`attendance_id`, `student_id`, `date`, `is_present`, `
 -- --------------------------------------------------------
 
 --
+-- Table structure for table `branch`
+--
+
+CREATE TABLE `branch` (
+  `branch_id` int(11) NOT NULL,
+  `branch_name` varchar(255) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `branch`
+--
+
+INSERT INTO `branch` (`branch_id`, `branch_name`) VALUES
+(1, 'Developpment Digital'),
+(2, 'Developpment Digital Option Application Mobile'),
+(3, 'Developpment Digital Option Full-Stuck');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `branch_crouse`
+--
+
+CREATE TABLE `branch_crouse` (
+  `branch_id` int(11) NOT NULL,
+  `crouse_id` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `branch_crouse`
+--
+
+INSERT INTO `branch_crouse` (`branch_id`, `crouse_id`) VALUES
+(2, 1),
+(2, 2),
+(3, 2),
+(1, 4),
+(2, 4),
+(3, 4);
+
+-- --------------------------------------------------------
+
+--
 -- Table structure for table `class`
 --
 
 CREATE TABLE `class` (
   `class_id` int(11) NOT NULL,
+  `branch_id` int(11) NOT NULL,
   `class_name` varchar(255) NOT NULL,
   `class_year` year(4) NOT NULL,
   `remarks` varchar(255) NOT NULL,
-  `teacher_id` int(11) NOT NULL,
   `created_at` timestamp NULL DEFAULT current_timestamp(),
   `updated_at` timestamp NOT NULL DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
@@ -87,11 +184,11 @@ CREATE TABLE `class` (
 -- Dumping data for table `class`
 --
 
-INSERT INTO `class` (`class_id`, `class_name`, `class_year`, `remarks`, `teacher_id`, `created_at`, `updated_at`) VALUES
-(1, 'Dev101', '2022', 'Bonne classe', 3, '2022-09-07 12:25:15', '2024-01-15 12:25:15'),
-(2, 'DEV202', '2023', 'Moyenne class', 2, '2023-09-15 12:27:01', '2023-12-22 12:27:01'),
-(3, 'AA', '2019', 'Encore', 4, '2019-10-01 12:28:50', '2024-01-18 12:28:50'),
-(4, 'Get', '2024', 'Passage', 4, '2024-01-01 12:30:23', '2024-03-28 13:30:23');
+INSERT INTO `class` (`class_id`, `branch_id`, `class_name`, `class_year`, `remarks`, `created_at`, `updated_at`) VALUES
+(1, 1, 'Dev101', '2022', 'Bonne classe', '2022-09-07 12:25:15', '2024-01-15 12:25:15'),
+(2, 2, 'DEV202', '2023', 'Moyenne class', '2023-09-15 12:27:01', '2023-12-22 12:27:01'),
+(3, 1, 'AA', '2019', 'Encore', '2019-10-01 12:28:50', '2024-01-18 12:28:50'),
+(4, 1, 'Get', '2024', 'Passage', '2024-01-01 12:30:23', '2024-03-28 13:30:23');
 
 -- --------------------------------------------------------
 
@@ -133,6 +230,30 @@ INSERT INTO `class_student` (`class_id`, `student_id`) VALUES
 (3, 5),
 (1, 2),
 (2, 4);
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `class_teacher`
+--
+
+CREATE TABLE `class_teacher` (
+  `class_id` int(11) NOT NULL,
+  `teacher_id` int(11) NOT NULL,
+  `created_at` timestamp NOT NULL DEFAULT current_timestamp()
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `class_teacher`
+--
+
+INSERT INTO `class_teacher` (`class_id`, `teacher_id`, `created_at`) VALUES
+(1, 1, '2024-04-12 19:20:27'),
+(1, 2, '2024-04-12 19:20:27'),
+(1, 3, '2024-04-12 19:20:27'),
+(2, 2, '2024-04-12 19:20:27'),
+(2, 3, '2024-04-12 19:20:27'),
+(2, 13, '2024-04-12 19:20:27');
 
 -- --------------------------------------------------------
 
@@ -179,8 +300,16 @@ CREATE TABLE `fee` (
 
 INSERT INTO `fee` (`fee_id`, `student_id`, `fee_description`, `total_fee`, `fee_date`, `is_paid`) VALUES
 (1, 1, NULL, 3000, '2024-01-02', 1),
-(2, 2, NULL, 3500, '2024-03-04', 1),
-(3, 3, NULL, 2000, '2024-02-06', 3);
+(2, 2, 'School Fee for March', 500, '2023-04-04', 1),
+(3, 3, NULL, 2000, '2024-02-06', 0),
+(4, 2, 'School Fee for April', 500, '2023-05-04', 1),
+(5, 2, 'School Fee for May', 500, '2023-06-04', 1),
+(6, 2, 'School Fee for June', 500, '2023-07-04', 0),
+(7, 2, 'School Fee for July', 500, '2023-08-04', 0),
+(8, 2, 'School Fee for Setepmber', 550, '2022-10-04', 0),
+(9, 2, 'School Fee for October', 500, '2022-11-04', 0),
+(10, 2, 'School Fee for November', 500, '2022-12-04', 0),
+(11, 2, 'School Fee for December', 550, '2023-01-04', 0);
 
 -- --------------------------------------------------------
 
@@ -270,17 +399,23 @@ INSERT INTO `multimedia` (`multimedia_id`, `file_type`, `size`, `title`, `descrp
 CREATE TABLE `question` (
   `question_id` int(11) NOT NULL,
   `test_online_id` int(11) DEFAULT NULL,
-  `question` text DEFAULT NULL
+  `question` text DEFAULT NULL,
+  `mark` float NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Dumping data for table `question`
 --
 
-INSERT INTO `question` (`question_id`, `test_online_id`, `question`) VALUES
-(1, 1, ' défiiez  java?'),
-(2, 2, 'C\'est quoi l\'IKGA ?'),
-(3, 3, 'Donner un titre au texte ?');
+INSERT INTO `question` (`question_id`, `test_online_id`, `question`, `mark`) VALUES
+(1, 4, 'What is the output of the following Java code snippet?\r\nint x = 5;\r\nSystem.out.println(x++ + ++x);', 12.5),
+(2, 4, 'Which of the following statements is true about Java interface?', 12.5),
+(3, 4, 'What is the correct way to declare a constant variable in Java?', 12.5),
+(4, 4, 'What is the purpose of the super keyword in Java?', 12.5),
+(5, 4, 'What will be the output of the following code?\nString str1 = \"hello\";\nString str2 = new String(\"hello\");\nSystem.out.println(str1 == str2);', 12.5),
+(6, 4, 'Which collection class allows you to associate a unique key with a value in Java?', 12.5),
+(7, 4, 'What does the break statement do in Java?', 12.5),
+(8, 4, 'Which of the following statements is true about Java threads?', 12.5);
 
 -- --------------------------------------------------------
 
@@ -458,6 +593,8 @@ INSERT INTO `test` (`test_id`, `test_code`, `mark`, `student_id`, `course_id`, `
 
 CREATE TABLE `test_online` (
   `test_online_id` int(11) NOT NULL,
+  `course_id` int(11) NOT NULL,
+  `test_online_name` varchar(255) NOT NULL,
   `class_id` int(11) DEFAULT NULL,
   `duration` time DEFAULT NULL,
   `score` int(11) DEFAULT NULL
@@ -467,14 +604,22 @@ CREATE TABLE `test_online` (
 -- Dumping data for table `test_online`
 --
 
-INSERT INTO `test_online` (`test_online_id`, `class_id`, `duration`, `score`) VALUES
-(1, 2, '08:30:29', 30),
-(2, 3, '13:30:22', 5),
-(3, 4, '13:30:22', 25);
+INSERT INTO `test_online` (`test_online_id`, `course_id`, `test_online_name`, `class_id`, `duration`, `score`) VALUES
+(1, 2, 'Test 1', 1, '00:30:00', 30),
+(2, 3, 'Test 2', 1, '01:00:00', 5),
+(3, 4, 'Test 3', 1, '00:45:00', 25),
+(4, 1, 'Java Programming Quiz', 1, '00:30:00', NULL);
 
 --
 -- Indexes for dumped tables
 --
+
+--
+-- Indexes for table `admin`
+--
+ALTER TABLE `admin`
+  ADD PRIMARY KEY (`admin_id`),
+  ADD UNIQUE KEY `email` (`email`);
 
 --
 -- Indexes for table `answer`
@@ -494,11 +639,24 @@ ALTER TABLE `attendance`
   ADD KEY `f_attendance_teacher` (`teacher_id`);
 
 --
+-- Indexes for table `branch`
+--
+ALTER TABLE `branch`
+  ADD PRIMARY KEY (`branch_id`);
+
+--
+-- Indexes for table `branch_crouse`
+--
+ALTER TABLE `branch_crouse`
+  ADD PRIMARY KEY (`crouse_id`,`branch_id`),
+  ADD KEY `ccc` (`branch_id`);
+
+--
 -- Indexes for table `class`
 --
 ALTER TABLE `class`
   ADD PRIMARY KEY (`class_id`),
-  ADD KEY `class_ibfk_1` (`teacher_id`);
+  ADD KEY `class_branch` (`branch_id`);
 
 --
 -- Indexes for table `class_course`
@@ -516,10 +674,18 @@ ALTER TABLE `class_student`
   ADD KEY `class_student_ibfk_2` (`student_id`);
 
 --
+-- Indexes for table `class_teacher`
+--
+ALTER TABLE `class_teacher`
+  ADD PRIMARY KEY (`class_id`,`teacher_id`),
+  ADD KEY `class_teacher_teacher` (`teacher_id`);
+
+--
 -- Indexes for table `course`
 --
 ALTER TABLE `course`
-  ADD PRIMARY KEY (`course_id`);
+  ADD PRIMARY KEY (`course_id`),
+  ADD UNIQUE KEY `course_name` (`course_name`);
 
 --
 -- Indexes for table `fee`
@@ -612,16 +778,28 @@ ALTER TABLE `test_online`
 --
 
 --
+-- AUTO_INCREMENT for table `admin`
+--
+ALTER TABLE `admin`
+  MODIFY `admin_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+
+--
 -- AUTO_INCREMENT for table `answer`
 --
 ALTER TABLE `answer`
-  MODIFY `answer_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `answer_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=33;
 
 --
 -- AUTO_INCREMENT for table `attendance`
 --
 ALTER TABLE `attendance`
   MODIFY `attendance_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+
+--
+-- AUTO_INCREMENT for table `branch`
+--
+ALTER TABLE `branch`
+  MODIFY `branch_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
 -- AUTO_INCREMENT for table `class`
@@ -639,7 +817,7 @@ ALTER TABLE `course`
 -- AUTO_INCREMENT for table `fee`
 --
 ALTER TABLE `fee`
-  MODIFY `fee_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `fee_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=24;
 
 --
 -- AUTO_INCREMENT for table `holiday`
@@ -663,7 +841,7 @@ ALTER TABLE `multimedia`
 -- AUTO_INCREMENT for table `question`
 --
 ALTER TABLE `question`
-  MODIFY `question_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `question_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
 
 --
 -- AUTO_INCREMENT for table `report_card`
@@ -705,7 +883,7 @@ ALTER TABLE `test`
 -- AUTO_INCREMENT for table `test_online`
 --
 ALTER TABLE `test_online`
-  MODIFY `test_online_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `test_online_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
 -- Constraints for dumped tables
@@ -727,10 +905,17 @@ ALTER TABLE `attendance`
   ADD CONSTRAINT `f_attendance_teacher` FOREIGN KEY (`teacher_id`) REFERENCES `teacher` (`teacher_id`) ON DELETE NO ACTION ON UPDATE NO ACTION;
 
 --
+-- Constraints for table `branch_crouse`
+--
+ALTER TABLE `branch_crouse`
+  ADD CONSTRAINT `ccc` FOREIGN KEY (`branch_id`) REFERENCES `branch` (`branch_id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
+  ADD CONSTRAINT `vvv` FOREIGN KEY (`crouse_id`) REFERENCES `course` (`course_id`) ON DELETE NO ACTION ON UPDATE NO ACTION;
+
+--
 -- Constraints for table `class`
 --
 ALTER TABLE `class`
-  ADD CONSTRAINT `class_ibfk_1` FOREIGN KEY (`teacher_id`) REFERENCES `teacher` (`teacher_id`) ON DELETE NO ACTION ON UPDATE NO ACTION;
+  ADD CONSTRAINT `class_branch` FOREIGN KEY (`branch_id`) REFERENCES `branch` (`branch_id`) ON DELETE NO ACTION ON UPDATE NO ACTION;
 
 --
 -- Constraints for table `class_course`
@@ -745,6 +930,13 @@ ALTER TABLE `class_course`
 ALTER TABLE `class_student`
   ADD CONSTRAINT `class_student_ibfk_1` FOREIGN KEY (`class_id`) REFERENCES `class` (`class_id`),
   ADD CONSTRAINT `class_student_ibfk_2` FOREIGN KEY (`student_id`) REFERENCES `student` (`student_id`);
+
+--
+-- Constraints for table `class_teacher`
+--
+ALTER TABLE `class_teacher`
+  ADD CONSTRAINT `class_teacher_class` FOREIGN KEY (`class_id`) REFERENCES `class` (`class_id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
+  ADD CONSTRAINT `class_teacher_teacher` FOREIGN KEY (`teacher_id`) REFERENCES `teacher` (`teacher_id`) ON DELETE NO ACTION ON UPDATE NO ACTION;
 
 --
 -- Constraints for table `fee`
@@ -798,6 +990,21 @@ ALTER TABLE `test`
 --
 ALTER TABLE `test_online`
   ADD CONSTRAINT `f_test_online_class` FOREIGN KEY (`class_id`) REFERENCES `class` (`class_id`) ON DELETE NO ACTION ON UPDATE NO ACTION;
+
+DELIMITER $$
+--
+-- Events
+--
+CREATE DEFINER=`root`@`localhost` EVENT `insert fee` ON SCHEDULE EVERY 1 MONTH STARTS '2023-09-01 14:40:12' ENDS '2024-07-01 14:40:12' ON COMPLETION NOT PRESERVE ENABLE DO INSERT INTO fee (fee_id, student_id, fee_description, total_fee, fee_date, is_paid)
+SELECT null,
+       student_id,
+       CONCAT('School Fee for ', MONTHNAME(CURRENT_DATE)) AS fee_description,
+       500,
+       CURRENT_DATE,
+       0
+FROM student$$
+
+DELIMITER ;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
