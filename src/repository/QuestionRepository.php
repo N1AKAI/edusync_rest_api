@@ -15,7 +15,7 @@ class QuestionRepository
 
   public function getQuestions($test_online_id, $student_id)
   {
-    $stmt = $this->con->prepare("SELECT question.question, question.mark, answer.answer FROM question
+    $stmt = $this->con->prepare("SELECT question.question_id, question.question, question.mark, answer.answer, answer.answer_id FROM question
     INNER JOIN test_online USING(test_online_id)
     INNER JOIN answer USING(question_id)
     INNER JOIN class USING(class_id)
@@ -32,15 +32,16 @@ class QuestionRepository
     $transformedData = [];
     foreach ($questions as $qa) {
       // Check if the question already exists in $transformedData
-      if (isset($transformedData[$qa['question']])) {
+      if (isset($transformedData[$qa['question_id']])) {
         // Append the answer to the existing question
-        $transformedData[$qa['question']]['answers'][] = $qa['answer'];
+        $transformedData[$qa['question_id']]['answers'][] = ['answer_id' => $qa['answer_id'], 'answer' => $qa['answer']];
       } else {
         // Create a new entry for the question with its first answer
-        $transformedData[$qa['question']] = [
+        $transformedData[$qa['question_id']] = [
+          "question_id" => $qa['question_id'],
           "question" => $qa['question'],
           "mark" => $qa['mark'],
-          "answers" => [$qa['answer']]
+          "answers" => [['answer_id' => $qa['answer_id'], 'answer' => $qa['answer']]]
         ];
       }
     }

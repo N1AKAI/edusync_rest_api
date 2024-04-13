@@ -19,9 +19,10 @@ class TestOnlineRepository
     test_online_id, test_online_name, duration, score,
     course_name
     FROM test_online
+    INNER JOIN course USING (course_id)
+    LEFT JOIN test_online_student USING (test_online_id)
     INNER JOIN class USING (class_id)
     INNER JOIN class_student USING (class_id)
-    INNER JOIN course USING (course_id)
     WHERE class_student.student_id = ?
     ORDER BY test_online.test_online_id DESC");
     $stmt->bind_param("i", $student_id);

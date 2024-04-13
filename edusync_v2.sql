@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Apr 12, 2024 at 10:04 PM
+-- Generation Time: Apr 13, 2024 at 11:04 AM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.2.12
 
@@ -596,19 +596,38 @@ CREATE TABLE `test_online` (
   `course_id` int(11) NOT NULL,
   `test_online_name` varchar(255) NOT NULL,
   `class_id` int(11) DEFAULT NULL,
-  `duration` time DEFAULT NULL,
-  `score` int(11) DEFAULT NULL
+  `duration` time DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Dumping data for table `test_online`
 --
 
-INSERT INTO `test_online` (`test_online_id`, `course_id`, `test_online_name`, `class_id`, `duration`, `score`) VALUES
-(1, 2, 'Test 1', 1, '00:30:00', 30),
-(2, 3, 'Test 2', 1, '01:00:00', 5),
-(3, 4, 'Test 3', 1, '00:45:00', 25),
-(4, 1, 'Java Programming Quiz', 1, '00:30:00', NULL);
+INSERT INTO `test_online` (`test_online_id`, `course_id`, `test_online_name`, `class_id`, `duration`) VALUES
+(1, 2, 'Test 1', 1, '00:30:00'),
+(2, 3, 'Test 2', 1, '01:00:00'),
+(3, 4, 'Test 3', 1, '00:45:00'),
+(4, 1, 'Java Programming Quiz', 1, '00:30:00');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `test_online_student`
+--
+
+CREATE TABLE `test_online_student` (
+  `test_online_id` int(11) NOT NULL,
+  `student_id` int(11) NOT NULL,
+  `score` float DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `test_online_student`
+--
+
+INSERT INTO `test_online_student` (`test_online_id`, `student_id`, `score`) VALUES
+(1, 2, 65),
+(2, 2, 75);
 
 --
 -- Indexes for dumped tables
@@ -772,6 +791,13 @@ ALTER TABLE `test`
 ALTER TABLE `test_online`
   ADD PRIMARY KEY (`test_online_id`),
   ADD KEY `f_test_online_class` (`class_id`);
+
+--
+-- Indexes for table `test_online_student`
+--
+ALTER TABLE `test_online_student`
+  ADD PRIMARY KEY (`test_online_id`,`student_id`),
+  ADD KEY ` test_online_student_student` (`student_id`);
 
 --
 -- AUTO_INCREMENT for dumped tables
@@ -990,6 +1016,13 @@ ALTER TABLE `test`
 --
 ALTER TABLE `test_online`
   ADD CONSTRAINT `f_test_online_class` FOREIGN KEY (`class_id`) REFERENCES `class` (`class_id`) ON DELETE NO ACTION ON UPDATE NO ACTION;
+
+--
+-- Constraints for table `test_online_student`
+--
+ALTER TABLE `test_online_student`
+  ADD CONSTRAINT ` test_online_student_student` FOREIGN KEY (`student_id`) REFERENCES `student` (`student_id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
+  ADD CONSTRAINT `test_online_student_test_online` FOREIGN KEY (`test_online_id`) REFERENCES `test_online` (`test_online_id`) ON DELETE NO ACTION ON UPDATE NO ACTION;
 
 DELIMITER $$
 --

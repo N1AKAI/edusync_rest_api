@@ -72,4 +72,17 @@ class AnswerRepository
         }
         return false;
     }
+
+    public function isAnswerCorrect($question_id, $answer_id)
+    {
+        $stmt = $this->con->prepare("SELECT mark FROM answer
+        INNER JOIN question USING (question_id)
+        WHERE question_id = ? AND answer_id = ? AND is_correct = 1");
+        $stmt->bind_param("ii", $question_id, $answer_id);
+        $stmt->execute();
+        $stmt->store_result();
+        $stmt->bind_result($mark);
+        $stmt->fetch();
+        return $mark;
+    }
 }

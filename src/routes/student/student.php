@@ -1,6 +1,7 @@
 <?php
 
 use App\Lib\JWTAuth;
+use App\Repository\AnswerRepository;
 use App\Repository\AttendanceRepository;
 use App\Repository\ClassRepository;
 use App\Repository\FeeRepository;
@@ -8,6 +9,7 @@ use App\Repository\HomeworkRepository;
 use App\Repository\QuestionRepository;
 use App\Repository\StudentRepository;
 use App\Repository\TestOnlineRepository;
+use App\Repository\TestOnlineStudentRepository;
 use App\Repository\TestRepository;
 use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
@@ -119,19 +121,38 @@ $app->get("/student/exams/{id}/questions", function (Request $request, Response 
     ->withStatus(200);
 });
 
-$app->put("/student/exams/{id}", function (Request $request, Response $response, array $args) {
+$app->post("/student/exams/{id}", function (Request $request, Response $response, array $args) {
+  $res["error"] = true;
+  $res["message"] = "Something went wrong!";
+  $status = 200;
+
 
   $id = $args['id'];
 
+  $data = $request->getParsedBody();
+  $score = 0;
+  $repo = new AnswerRepository();
+
+  foreach ($data as $key => $value) {
+    if ($mark = $repo->isAnswerCorrect($key, $value)) {
+      $score += $mark;
+    }
+  }
+  print_r($data);
+  die();
   $token = str_replace("Bearer ", "", $request->getHeaderLine('Authorization'));
   $data = JWTAuth::getData($token);
 
-  $repo = new TestOnlineRepository();
-  $questions = $repo->submit();
+  $repo = new TestOnlineStudentRepository();
+  if ($repo->submit($data->id, $id, $score)) {
+    $res["error"] = false;
+    $res["message"] = "Your score is $score";
+    $status = 201;
+  }
 
-  $response->getBody()->write(json_encode($questions));
+  $response->getBody()->write(json_encode($res));
 
   return $response
     ->withHeader('Content-type', 'application/json')
-    ->withStatus(200);
+    ->withStatus($status);
 });
