@@ -138,8 +138,7 @@ $app->post("/student/exams/{id}", function (Request $request, Response $response
       $score += $mark;
     }
   }
-  print_r($data);
-  die();
+
   $token = str_replace("Bearer ", "", $request->getHeaderLine('Authorization'));
   $data = JWTAuth::getData($token);
 

@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Apr 13, 2024 at 11:04 AM
+-- Generation Time: Apr 13, 2024 at 03:34 PM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.2.12
 
@@ -489,7 +489,7 @@ CREATE TABLE `student` (
 
 INSERT INTO `student` (`student_id`, `first_name`, `last_name`, `date_of_birth`, `phone_number`, `fathers_name`, `mothers_name`, `join_date`, `email`, `password`, `avatar`, `otp`, `created_at`, `updated_at`) VALUES
 (1, 'Fatima Ezzahra', 'Baba', '2004-10-19', '0775729368', 'Rachid', 'Karima', '2023-10-03', 'babafatimaezzahra434@gmail.com', 'baba@babafz', NULL, 'OTkzNjY=', '2023-10-04 11:58:48', '2023-10-04 11:58:48'),
-(2, 'Saad', 'Aboulhoda', '2003-01-30', '0671670183', 'Miloud', 'Fatima', '2023-09-21', 'rakansubs@gmail.com', '$2y$10$35rpUykdP9HzXIUoEWcQfuUVpdSryL4AU3RWB/3ST0Ag/1Y2voWFS', NULL, '', '2023-09-21 12:03:22', '2024-02-05 11:03:22'),
+(2, 'Saad', 'Aboulhoda', '2003-01-30', '0671670183', 'Miloud', 'Fatima', '2023-09-21', 'rakansubs@gmail.com', '$2y$10$iffeXiN0s2dU2jbsHtKIc.9CyQFzs82oUywqSJj0E8zgOSXym9/oK', NULL, '', '2023-09-21 12:03:22', '2024-02-05 11:03:22'),
 (3, 'Hamza', 'El Hourch', NULL, '062901625', 'Ahmed', 'Fatima', '2023-11-01', 'elhorchhamza@gmail.com', 'hamza@hamza', NULL, 'OTkzNjY=', '2023-11-01 12:07:48', '2024-03-29 15:07:48'),
 (4, 'Halima', 'Bezaz', NULL, '0613060106', 'Hassan', 'Amina', '2023-10-10', 'bzazhalima@gmail.com', 'halima@hailma', NULL, 'OTkzNjY=', '2023-10-10 12:10:07', '2023-12-02 09:10:07'),
 (5, 'Kawter', 'El Azrak', NULL, '0603848212', 'Amin', 'Naziha', '2023-09-30', 'elazrakkawter@gmail.com', 'kawter@kawter', NULL, 'OTkzNjY=', '2023-09-30 13:12:10', '2024-03-03 12:12:10');
@@ -627,7 +627,8 @@ CREATE TABLE `test_online_student` (
 
 INSERT INTO `test_online_student` (`test_online_id`, `student_id`, `score`) VALUES
 (1, 2, 65),
-(2, 2, 75);
+(2, 2, 75),
+(4, 2, 12);
 
 --
 -- Indexes for dumped tables
