@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Apr 13, 2024 at 03:34 PM
+-- Generation Time: Apr 14, 2024 at 03:12 PM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.2.12
 
@@ -117,9 +117,9 @@ CREATE TABLE `attendance` (
 --
 
 INSERT INTO `attendance` (`attendance_id`, `student_id`, `date`, `is_present`, `class_id`, `teacher_id`, `session_id`) VALUES
-(1, 2, '2023-10-19', 0, 1, 1, 2),
-(2, 1, '2023-11-02', 0, 1, 4, 4),
-(3, 4, '2024-01-04', 2, 4, 2, 3);
+(1, 2, '2023-10-19', 0, 1, 13, 2),
+(2, 1, '2023-11-02', 0, 1, 13, 4),
+(3, 4, '2024-01-04', 2, 4, 13, 3);
 
 -- --------------------------------------------------------
 
@@ -139,7 +139,7 @@ CREATE TABLE `branch` (
 INSERT INTO `branch` (`branch_id`, `branch_name`) VALUES
 (1, 'Developpment Digital'),
 (2, 'Developpment Digital Option Application Mobile'),
-(3, 'Developpment Digital Option Full-Stuck');
+(3, 'Gestion des Entreprises');
 
 -- --------------------------------------------------------
 
@@ -157,12 +157,31 @@ CREATE TABLE `branch_crouse` (
 --
 
 INSERT INTO `branch_crouse` (`branch_id`, `crouse_id`) VALUES
-(2, 1),
-(2, 2),
-(3, 2),
+(1, 3),
+(3, 3),
 (1, 4),
-(2, 4),
-(3, 4);
+(1, 5),
+(1, 6),
+(1, 7),
+(1, 8),
+(1, 9),
+(1, 10),
+(1, 11),
+(1, 12),
+(1, 13),
+(1, 14),
+(1, 15),
+(1, 16),
+(1, 17),
+(3, 18),
+(3, 19),
+(3, 20),
+(3, 21),
+(3, 22),
+(3, 23),
+(3, 24),
+(3, 25),
+(3, 26);
 
 -- --------------------------------------------------------
 
@@ -176,8 +195,8 @@ CREATE TABLE `class` (
   `class_name` varchar(255) NOT NULL,
   `class_year` year(4) NOT NULL,
   `remarks` varchar(255) NOT NULL,
-  `created_at` timestamp NULL DEFAULT current_timestamp(),
-  `updated_at` timestamp NOT NULL DEFAULT current_timestamp()
+  `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
+  `updated_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
@@ -185,31 +204,10 @@ CREATE TABLE `class` (
 --
 
 INSERT INTO `class` (`class_id`, `branch_id`, `class_name`, `class_year`, `remarks`, `created_at`, `updated_at`) VALUES
-(1, 1, 'Dev101', '2022', 'Bonne classe', '2022-09-07 12:25:15', '2024-01-15 12:25:15'),
-(2, 2, 'DEV202', '2023', 'Moyenne class', '2023-09-15 12:27:01', '2023-12-22 12:27:01'),
-(3, 1, 'AA', '2019', 'Encore', '2019-10-01 12:28:50', '2024-01-18 12:28:50'),
-(4, 1, 'Get', '2024', 'Passage', '2024-01-01 12:30:23', '2024-03-28 13:30:23');
-
--- --------------------------------------------------------
-
---
--- Table structure for table `class_course`
---
-
-CREATE TABLE `class_course` (
-  `class_course_id` int(11) NOT NULL,
-  `class_id` int(11) DEFAULT NULL,
-  `course_id` int(11) DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
---
--- Dumping data for table `class_course`
---
-
-INSERT INTO `class_course` (`class_course_id`, `class_id`, `course_id`) VALUES
-(1, 1, 4),
-(2, 2, 1),
-(3, 4, 2);
+(1, 1, 'DEV101', '2022', 'Bonne classe', '2023-08-31 23:00:00', NULL),
+(2, 2, 'DEV202', '2023', 'Moyenne class', '2023-08-31 23:00:00', NULL),
+(3, 3, 'GE101', '2023', 'Encore', '2023-08-31 23:00:00', NULL),
+(4, 3, 'GE102', '2023', 'Passage', '2023-08-31 23:00:00', NULL);
 
 -- --------------------------------------------------------
 
@@ -219,17 +217,20 @@ INSERT INTO `class_course` (`class_course_id`, `class_id`, `course_id`) VALUES
 
 CREATE TABLE `class_student` (
   `class_id` int(11) NOT NULL,
-  `student_id` int(11) NOT NULL
+  `student_id` int(11) NOT NULL,
+  `id` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Dumping data for table `class_student`
 --
 
-INSERT INTO `class_student` (`class_id`, `student_id`) VALUES
-(3, 5),
-(1, 2),
-(2, 4);
+INSERT INTO `class_student` (`class_id`, `student_id`, `id`) VALUES
+(1, 2, 1),
+(1, 3, 2),
+(2, 1, 3),
+(2, 4, 4),
+(2, 5, 5);
 
 -- --------------------------------------------------------
 
@@ -248,12 +249,10 @@ CREATE TABLE `class_teacher` (
 --
 
 INSERT INTO `class_teacher` (`class_id`, `teacher_id`, `created_at`) VALUES
-(1, 1, '2024-04-12 19:20:27'),
-(1, 2, '2024-04-12 19:20:27'),
-(1, 3, '2024-04-12 19:20:27'),
-(2, 2, '2024-04-12 19:20:27'),
-(2, 3, '2024-04-12 19:20:27'),
-(2, 13, '2024-04-12 19:20:27');
+(1, 13, '2024-04-13 17:55:00'),
+(2, 13, '2024-04-13 17:55:17'),
+(3, 13, '2024-04-13 17:55:17'),
+(4, 13, '2024-04-13 17:55:17');
 
 -- --------------------------------------------------------
 
@@ -265,8 +264,8 @@ CREATE TABLE `course` (
   `course_id` int(11) NOT NULL,
   `course_name` varchar(45) DEFAULT NULL,
   `course_code` varchar(45) DEFAULT NULL,
-  `created_at` varchar(45) DEFAULT NULL,
-  `updated_at` varchar(45) DEFAULT NULL
+  `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
+  `updated_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
@@ -274,10 +273,41 @@ CREATE TABLE `course` (
 --
 
 INSERT INTO `course` (`course_id`, `course_name`, `course_code`, `created_at`, `updated_at`) VALUES
-(1, 'Bases du développement android', 'M201', '2023-09-30 14:12:10', NULL),
-(2, 'Exel', 'M208', NULL, NULL),
-(3, 'Entreprenariat', 'M103', '2023-10-10 13:10:07', NULL),
-(4, 'Anglais', 'M205', NULL, NULL);
+(1, 'Bases du développement android', 'M201', '2023-08-31 23:00:00', NULL),
+(2, 'Exel', 'M208', '2023-08-31 23:00:00', NULL),
+(3, 'Métier et formation ', 'M101', '2023-08-31 23:00:00', NULL),
+(4, 'Anglais technique', 'EGTS103', '2023-08-31 23:00:00', NULL),
+(5, 'Arabe', 'EGTS101', '2023-08-31 23:00:00', NULL),
+(6, 'Français', 'EGTS102', '2023-08-31 23:00:00', NULL),
+(7, 'Culture entrepreneuriale-Partie 1', 'EGTS104', '2023-08-31 23:00:00', NULL),
+(8, 'Compétences comportementales et sociales', 'EGTS105', '2023-08-31 23:00:00', NULL),
+(9, 'Entrepreneuriat-PIE 1', 'EGTS108', '2023-08-31 23:00:00', NULL),
+(10, 'Culture et techniques avancées du numérique', 'EGTSA106', '2023-08-31 23:00:00', NULL),
+(11, 'Acquérir les bases de l’algorithmique', 'M102', '2024-04-14 09:36:15', NULL),
+(12, 'Programmer en Orienté Objet', 'M103', '2024-04-14 09:36:15', NULL),
+(13, 'Développer des sites web statiques', 'M104', '2024-04-14 09:36:15', NULL),
+(14, 'Programmer en JavaScript', 'M105', '2024-04-14 09:36:15', NULL),
+(15, 'Manipuler des bases de données', 'M106', '2024-04-14 09:36:15', NULL),
+(16, 'Développer des sites web dynamiques', 'M107', '2024-04-14 09:36:15', NULL),
+(17, 'S’initier à la sécurité des systèmes d’inform', 'M108', '2024-04-14 09:36:15', NULL),
+(18, 'Droit fondamental', 'M102', '2024-04-14 09:48:05', NULL),
+(19, 'Management des organisations', 'M103', '2024-04-14 09:48:05', NULL),
+(20, 'Comptabilité générale 1', 'M104', '2024-04-14 09:48:05', NULL),
+(21, 'Gestion électronique des données', 'M105', '2024-04-14 09:48:05', NULL),
+(22, 'Marketing', 'M106', '2024-04-14 09:48:05', NULL),
+(23, 'Comptabilité générale 2', 'M107', '2024-04-14 09:48:05', NULL),
+(24, 'Ecrits professionnels', 'M108', '2024-04-14 09:48:05', NULL),
+(25, 'Statistique', 'M109', '2024-04-14 09:48:05', NULL),
+(26, 'Logiciel de Gestion Commerciale, Comptable', 'M110', '2024-04-14 09:48:05', NULL),
+(27, 'Bases du développement Android', 'M201', '2024-04-14 11:39:41', NULL),
+(28, 'Programmation KOTLIN', 'M202', '2024-04-14 11:39:41', NULL),
+(29, 'Gestion de projet ', 'M203', '2024-04-14 11:39:41', NULL),
+(30, 'Initiation aux composants et modèle d’une app', 'M204', '2024-04-14 11:39:41', NULL),
+(31, 'Développement des interfaces utilisateurs sou', 'M205', '2024-04-14 11:39:41', NULL),
+(32, 'Elaboration d’une application Android sécuris', 'M206', '2024-04-14 11:39:41', NULL),
+(33, 'Développement des applications IOS ', 'M207', '2024-04-14 11:39:41', NULL),
+(34, 'Développement multiplateforme ', 'M208', '2024-04-14 11:39:41', NULL),
+(35, 'Intégration du milieu professionnel', 'M209', '2024-04-14 11:39:41', NULL);
 
 -- --------------------------------------------------------
 
@@ -353,12 +383,12 @@ CREATE TABLE `homework` (
 --
 
 INSERT INTO `homework` (`homework_id`, `class_id`, `teacher_id`, `course_id`, `homework`, `created_at`, `updated_at`) VALUES
-(1, 1, 1, 4, 'Exercice', '2024-04-06 12:17:21', NULL),
-(2, 2, 3, 1, 'Tp en poo', '2024-04-06 12:17:21', NULL),
-(3, 4, 4, 3, 'Trouver un entrepreneur', '2024-04-06 12:17:21', NULL),
-(16, 1, 11, 4, 'Creative Writing', '2024-04-07 14:17:48', NULL),
-(17, 1, 11, 4, 'Grammar and Vocabulary', '2024-04-07 14:17:48', NULL),
-(18, 1, 11, 4, 'Research and Report', '2024-04-07 14:17:48', NULL),
+(1, 1, 13, 4, 'Exercice', '2024-04-06 12:17:21', NULL),
+(2, 2, 13, 1, 'Tp en poo', '2024-04-06 12:17:21', NULL),
+(3, 4, 13, 3, 'Trouver un entrepreneur', '2024-04-06 12:17:21', NULL),
+(16, 1, 13, 4, 'Creative Writing', '2024-04-07 14:17:48', NULL),
+(17, 1, 13, 4, 'Grammar and Vocabulary', '2024-04-07 14:17:48', NULL),
+(18, 1, 13, 4, 'Research and Report', '2024-04-07 14:17:48', NULL),
 (19, 1, 13, 1, 'Basic Java Program', '2024-04-07 14:17:48', NULL),
 (20, 1, 13, 1, 'Java Loops and Conditionals', '2024-04-07 14:17:48', NULL),
 (21, 1, 13, 1, 'Polymorphisme', '2024-04-07 20:28:39', NULL),
@@ -435,9 +465,9 @@ CREATE TABLE `report_card` (
 --
 
 INSERT INTO `report_card` (`report_card_id`, `student_id`, `teacher_remark`, `teacher_id`) VALUES
-(1, 2, 'C\'est un bon élève qui étudie bien', 1),
-(2, 5, 'une eleve negligee ,déclenché l\'emeute', 3),
-(3, 3, 'Étudiant moyen, essayant d\'avancer', 3);
+(1, 2, 'C\'est un bon élève qui étudie bien', 13),
+(2, 5, 'une eleve negligee ,déclenché l\'emeute', 13),
+(3, 3, 'Étudiant moyen, essayant d\'avancer', 13);
 
 -- --------------------------------------------------------
 
@@ -490,9 +520,9 @@ CREATE TABLE `student` (
 INSERT INTO `student` (`student_id`, `first_name`, `last_name`, `date_of_birth`, `phone_number`, `fathers_name`, `mothers_name`, `join_date`, `email`, `password`, `avatar`, `otp`, `created_at`, `updated_at`) VALUES
 (1, 'Fatima Ezzahra', 'Baba', '2004-10-19', '0775729368', 'Rachid', 'Karima', '2023-10-03', 'babafatimaezzahra434@gmail.com', 'baba@babafz', NULL, 'OTkzNjY=', '2023-10-04 11:58:48', '2023-10-04 11:58:48'),
 (2, 'Saad', 'Aboulhoda', '2003-01-30', '0671670183', 'Miloud', 'Fatima', '2023-09-21', 'rakansubs@gmail.com', '$2y$10$iffeXiN0s2dU2jbsHtKIc.9CyQFzs82oUywqSJj0E8zgOSXym9/oK', NULL, '', '2023-09-21 12:03:22', '2024-02-05 11:03:22'),
-(3, 'Hamza', 'El Hourch', NULL, '062901625', 'Ahmed', 'Fatima', '2023-11-01', 'elhorchhamza@gmail.com', 'hamza@hamza', NULL, 'OTkzNjY=', '2023-11-01 12:07:48', '2024-03-29 15:07:48'),
-(4, 'Halima', 'Bezaz', NULL, '0613060106', 'Hassan', 'Amina', '2023-10-10', 'bzazhalima@gmail.com', 'halima@hailma', NULL, 'OTkzNjY=', '2023-10-10 12:10:07', '2023-12-02 09:10:07'),
-(5, 'Kawter', 'El Azrak', NULL, '0603848212', 'Amin', 'Naziha', '2023-09-30', 'elazrakkawter@gmail.com', 'kawter@kawter', NULL, 'OTkzNjY=', '2023-09-30 13:12:10', '2024-03-03 12:12:10');
+(3, 'Hamza', 'El Hourch', '2004-06-15', '062901625', 'Ahmed', 'Fatima', '2023-11-01', 'elhorchhamza@gmail.com', 'hamza@hamza', NULL, 'OTkzNjY=', '2023-11-01 12:07:48', '2024-03-29 15:07:48'),
+(4, 'Halima', 'Bezaz', '2004-04-08', '0613060106', 'Hassan', 'Amina', '2023-10-10', 'bzazhalima@gmail.com', 'halima@hailma', NULL, 'OTkzNjY=', '2023-10-10 12:10:07', '2023-12-02 09:10:07'),
+(5, 'Kawter', 'El Azrak', '2003-04-22', '0603848212', 'Amin', 'Naziha', '2023-09-30', 'elazrakkawter@gmail.com', 'kawter@kawter', NULL, 'OTkzNjY=', '2023-09-30 13:12:10', '2024-03-03 12:12:10');
 
 -- --------------------------------------------------------
 
@@ -539,7 +569,6 @@ CREATE TABLE `teacher` (
   `city` varchar(255) DEFAULT NULL,
   `state` varchar(255) DEFAULT NULL,
   `zip_code` int(11) DEFAULT NULL,
-  `country` varchar(255) DEFAULT NULL,
   `email_confirm_token` varchar(255) DEFAULT NULL,
   `created_at` timestamp NULL DEFAULT current_timestamp(),
   `updated_at` timestamp NULL DEFAULT current_timestamp()
@@ -549,14 +578,8 @@ CREATE TABLE `teacher` (
 -- Dumping data for table `teacher`
 --
 
-INSERT INTO `teacher` (`teacher_id`, `first_name`, `last_name`, `email`, `password`, `phone_number`, `gender`, `date_of_birth`, `joining_date`, `qualification`, `experience`, `cne`, `adresse`, `city`, `state`, `zip_code`, `country`, `email_confirm_token`, `created_at`, `updated_at`) VALUES
-(1, 'aaas', 'bbb', 'asliamin@gmail.com', 'amin@amin', '060000010', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '2016-02-09 12:16:04', '2024-04-03 10:27:02'),
-(2, 'Ismail', 'Chaoui', 'chaouiismail@gmail.com', 'ismail@ismail', '0600000000', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '2022-01-01 10:17:21', '2022-03-02 12:17:21'),
-(3, 'Salwa', 'ElRhali', 'elrhalisalwa@gmail.com', 'salwa@salwa', '0650405040', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '2015-03-16 13:19:37', '2022-02-15 12:19:37'),
-(4, 'aaaa', 'bbb', 'sabirirajae@gmail.com', 'rajae@rajae', '060000010', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '2024-03-29 13:23:21', '2024-04-03 11:05:30'),
-(11, 'AHMED', 'EL GHAZALI', 'ahmed.elghazali@gmail.com', '$2y$10$b.A52dArvkPN8gCHEzKLP.5g..Lzu8f/kLqr/tfAtHwHtKybSBxuO', '0620868963', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '2024-04-03 11:44:47', '2024-04-03 11:44:47'),
-(12, 'dskdjsk', 'dqjkdh', 'ahmed.elghazai@gmail.com', '$2y$10$Jdet.0gKJRCsGYF5XKgs4OUWoZl4wMJUOUxMYKHet84IOAXHZHhNu', '0798789', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '2024-04-03 11:52:31', '2024-04-03 11:52:31'),
-(13, 'aaa', 'bbb', 'aaa.bbbb@gmail.com', '$2y$10$9dH4ViYKzXko9VyJpFSWBuMnYRbdZKGANWRIGYuRyXWBDQ.TjxNDi', '060000010', 'Male', '0000-00-00', '0000-00-00', 'QA', 'EX', 'GA2366', 'A11', 'New Work', 'New Work', 123, 'Morocco', NULL, '2024-04-03 13:16:35', '2024-04-03 13:16:35');
+INSERT INTO `teacher` (`teacher_id`, `first_name`, `last_name`, `email`, `password`, `phone_number`, `gender`, `date_of_birth`, `joining_date`, `qualification`, `experience`, `cne`, `adresse`, `city`, `state`, `zip_code`, `email_confirm_token`, `created_at`, `updated_at`) VALUES
+(13, 'MILOUD', 'ABOULHODA', 'miloud.aboulhoda@gmail.com', '$2y$10$PVadFLK1Cqxyn0Il9B/5Su.9Mmnt050UmAzk2nyCI.EMNwLVMrd0e', '060000010', 'Male', '1995-06-30', '2010-01-26', 'QA', 'EX', 'GA2366', 'A11', 'New Work', 'New Work', 123, NULL, '2024-04-03 13:16:35', '2024-04-03 13:16:35');
 
 -- --------------------------------------------------------
 
@@ -679,17 +702,10 @@ ALTER TABLE `class`
   ADD KEY `class_branch` (`branch_id`);
 
 --
--- Indexes for table `class_course`
---
-ALTER TABLE `class_course`
-  ADD PRIMARY KEY (`class_course_id`),
-  ADD KEY `f1` (`class_id`),
-  ADD KEY `f2` (`course_id`);
-
---
 -- Indexes for table `class_student`
 --
 ALTER TABLE `class_student`
+  ADD PRIMARY KEY (`id`),
   ADD KEY `class_student_ibfk_1` (`class_id`),
   ADD KEY `class_student_ibfk_2` (`student_id`);
 
@@ -704,8 +720,7 @@ ALTER TABLE `class_teacher`
 -- Indexes for table `course`
 --
 ALTER TABLE `course`
-  ADD PRIMARY KEY (`course_id`),
-  ADD UNIQUE KEY `course_name` (`course_name`);
+  ADD PRIMARY KEY (`course_id`);
 
 --
 -- Indexes for table `fee`
@@ -835,10 +850,16 @@ ALTER TABLE `class`
   MODIFY `class_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
+-- AUTO_INCREMENT for table `class_student`
+--
+ALTER TABLE `class_student`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+
+--
 -- AUTO_INCREMENT for table `course`
 --
 ALTER TABLE `course`
-  MODIFY `course_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+  MODIFY `course_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=36;
 
 --
 -- AUTO_INCREMENT for table `fee`
@@ -943,13 +964,6 @@ ALTER TABLE `branch_crouse`
 --
 ALTER TABLE `class`
   ADD CONSTRAINT `class_branch` FOREIGN KEY (`branch_id`) REFERENCES `branch` (`branch_id`) ON DELETE NO ACTION ON UPDATE NO ACTION;
-
---
--- Constraints for table `class_course`
---
-ALTER TABLE `class_course`
-  ADD CONSTRAINT `f1` FOREIGN KEY (`class_id`) REFERENCES `class` (`class_id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
-  ADD CONSTRAINT `f2` FOREIGN KEY (`course_id`) REFERENCES `course` (`course_id`) ON DELETE NO ACTION ON UPDATE NO ACTION;
 
 --
 -- Constraints for table `class_student`

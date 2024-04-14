@@ -8,7 +8,7 @@ use Firebase\JWT\Key;
 class JWTAuth
 {
 
-  public static function getToken($id, $email, $isAdmin = false)
+  public static function getToken($id, $email, $type = TYPE_STUDENT)
   {
     $secret = SECRET_KEY;
 
@@ -18,17 +18,14 @@ class JWTAuth
     $token = [
       'header'  => [
         'id' => $id,
-        'email' => $email
+        'email' => $email,
+        'type' => $type
       ],
       'payload' => [
         'iat' => $now, // Start time
         'exp' => $exp // Expires after 1 hour
       ]
     ];
-
-    if ($isAdmin) {
-      $token['header']['admin'] = true;
-    }
 
     return JWT::encode($token, $secret, 'HS256');
   }

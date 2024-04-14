@@ -135,4 +135,20 @@ class TeacherRepository
     $stmt->store_result();
     return $stmt->num_rows > 0;
   }
+
+  public function getTeacherAndTheirClassesByEmail($email)
+  {
+    $stmt = $this->con->prepare("SELECT teacher_id, first_name, last_name, email,
+    phone_number, date_of_birth, GROUP_CONCAT(class_teacher.class_id) AS class_ids
+    FROM teacher
+    INNER JOIN class_teacher USING(teacher_id)
+    WHERE teacher.email = ?");
+
+    $stmt->bind_param("s", $email);
+    $stmt->execute();
+    $result = $stmt->get_result();
+    $row = $result->fetch_assoc();
+    $row['class_ids'] = explode(",", $row['class_ids']);
+    return $row;
+  }
 }

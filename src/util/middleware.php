@@ -13,6 +13,7 @@ $restrictRoutesMiddleware = function (Request $request, RequestHandler $handler)
   // Ignore these routes
   switch ($route) {
     case '/auth/students':
+    case '/auth/teachers':
     case '/auth/admins':
     case '/forget-password/student':
     case '/very-otp/student':

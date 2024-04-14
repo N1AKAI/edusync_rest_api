@@ -79,3 +79,8 @@ define('HOLIDAY_FAILURE', 502);
 // Report Card
 define('REPORT_CARD_CREATED', 501);
 define('REPORT_CARD_FAILURE', 502);
+
+// Types
+define("TYPE_STUDENT", "student");
+define("TYPE_TEACHER", "teacher");
+define("TYPE_ADMIN", "admin");

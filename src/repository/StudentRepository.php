@@ -40,6 +40,7 @@ class StudentRepository
       return STUDENT_NOT_FOUND;
     }
   }
+
   private function getStudentPasswordByEmail($email)
   {
     $stmt = $this->con->prepare("SELECT password FROM student WHERE email=?");
@@ -50,6 +51,7 @@ class StudentRepository
     $stmt->fetch();
     return $password;
   }
+
   public function getAllStudent()
   {
     $stmt = $this->con->prepare("SELECT student_id,first_name, last_name,  phone_number,fathers_name, mothers_name, join_date, email,created_at,updated_at
