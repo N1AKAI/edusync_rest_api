@@ -37,8 +37,9 @@ class HomeworkRepository
 
   public function getTeachersHomeworks($id)
   {
-    $stmt = $this->con->prepare("SELECT homework_id, homework, class_id
+    $stmt = $this->con->prepare("SELECT homework_id, homework, class_id, class_name
     FROM homework
+    INNER JOIN class USING (class_id)
     WHERE teacher_id = ?");
     $stmt->bind_param("i", $id);
     $stmt->execute();
