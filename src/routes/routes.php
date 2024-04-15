@@ -1,11 +1,17 @@
 <?php
 
-require_once __DIR__ . '/student/auth.php';
-require_once __DIR__ . '/teacher/auth.php';
-require_once __DIR__ . '/admin/auth.php';
-require_once __DIR__ . '/student/student.php';
-require_once __DIR__ . '/teacher/teacher.php';
-require_once __DIR__ . '/student/forget-password.php';
-require_once __DIR__ . '/admin/student.php';
-require_once __DIR__ . '/admin/teacher.php';
-require_once __DIR__ . '/admin/course.php';
+
+$folders = array_diff(scandir(__DIR__), array('..', '.'));
+
+foreach ($folders as $folder) {
+  $routeFolderDir = __DIR__ . "/" . $folder;
+  if (is_dir($routeFolderDir)) {
+    $routeFiles = array_diff(scandir($routeFolderDir), array('..', '.'));
+    foreach ($routeFiles as $file) {
+      $filePath = $routeFolderDir . '/' . $file;
+      if (is_file($filePath)) {
+        require_once $filePath;
+      }
+    }
+  }
+}

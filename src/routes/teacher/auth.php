@@ -1,7 +1,6 @@
 <?php
 
 use App\Lib\JWTAuth;
-use App\Repository\StudentRepository;
 use App\Repository\TeacherRepository;
 use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;

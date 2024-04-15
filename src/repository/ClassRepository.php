@@ -90,4 +90,21 @@ class ClassRepository
     }
     return false;
   }
+
+  public function getTeachersClasses($id)
+  {
+
+    $stmt = $this->con->prepare("SELECT * FROM class
+    INNER JOIN class_teacher USING (class_id)
+    WHERE teacher_id = ?");
+
+    $stmt->bind_param("i", $id);
+    $stmt->execute();
+    $result = $stmt->get_result();
+    $classes = [];
+    while ($row = $result->fetch_assoc()) {
+      $classes[] = $row;
+    }
+    return $classes;
+  }
 }
