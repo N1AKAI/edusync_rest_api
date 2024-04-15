@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Apr 14, 2024 at 03:12 PM
+-- Generation Time: Apr 15, 2024 at 06:44 PM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.2.12
 
@@ -239,20 +239,21 @@ INSERT INTO `class_student` (`class_id`, `student_id`, `id`) VALUES
 --
 
 CREATE TABLE `class_teacher` (
+  `id` int(11) NOT NULL,
   `class_id` int(11) NOT NULL,
   `teacher_id` int(11) NOT NULL,
-  `created_at` timestamp NOT NULL DEFAULT current_timestamp()
+  `course_id` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Dumping data for table `class_teacher`
 --
 
-INSERT INTO `class_teacher` (`class_id`, `teacher_id`, `created_at`) VALUES
-(1, 13, '2024-04-13 17:55:00'),
-(2, 13, '2024-04-13 17:55:17'),
-(3, 13, '2024-04-13 17:55:17'),
-(4, 13, '2024-04-13 17:55:17');
+INSERT INTO `class_teacher` (`id`, `class_id`, `teacher_id`, `course_id`) VALUES
+(1, 1, 13, 6),
+(2, 2, 13, 6),
+(3, 3, 13, 6),
+(4, 4, 13, 6);
 
 -- --------------------------------------------------------
 
@@ -713,8 +714,10 @@ ALTER TABLE `class_student`
 -- Indexes for table `class_teacher`
 --
 ALTER TABLE `class_teacher`
-  ADD PRIMARY KEY (`class_id`,`teacher_id`),
-  ADD KEY `class_teacher_teacher` (`teacher_id`);
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `class_teacher_teacher` (`teacher_id`),
+  ADD KEY `class_teacher_class` (`class_id`),
+  ADD KEY `class_teacher_course` (`course_id`);
 
 --
 -- Indexes for table `course`
@@ -856,6 +859,12 @@ ALTER TABLE `class_student`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 
 --
+-- AUTO_INCREMENT for table `class_teacher`
+--
+ALTER TABLE `class_teacher`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+
+--
 -- AUTO_INCREMENT for table `course`
 --
 ALTER TABLE `course`
@@ -976,8 +985,9 @@ ALTER TABLE `class_student`
 -- Constraints for table `class_teacher`
 --
 ALTER TABLE `class_teacher`
-  ADD CONSTRAINT `class_teacher_class` FOREIGN KEY (`class_id`) REFERENCES `class` (`class_id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
-  ADD CONSTRAINT `class_teacher_teacher` FOREIGN KEY (`teacher_id`) REFERENCES `teacher` (`teacher_id`) ON DELETE NO ACTION ON UPDATE NO ACTION;
+  ADD CONSTRAINT `class_teacher_class` FOREIGN KEY (`class_id`) REFERENCES `class` (`class_id`),
+  ADD CONSTRAINT `class_teacher_course` FOREIGN KEY (`course_id`) REFERENCES `course` (`course_id`),
+  ADD CONSTRAINT `class_teacher_teacher` FOREIGN KEY (`teacher_id`) REFERENCES `teacher` (`teacher_id`);
 
 --
 -- Constraints for table `fee`

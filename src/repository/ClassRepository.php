@@ -96,6 +96,7 @@ class ClassRepository
 
     $stmt = $this->con->prepare("SELECT * FROM class
     INNER JOIN class_teacher USING (class_id)
+    INNER JOIN branch USING (branch_id)
     WHERE teacher_id = ?");
 
     $stmt->bind_param("i", $id);
