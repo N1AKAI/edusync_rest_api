@@ -204,7 +204,7 @@ class StudentRepository
     (SELECT COUNT(*) FROM student s2 
     INNER JOIN class_student cs ON s2.student_id = cs.student_id
     WHERE s2.last_name <= s.last_name
-    AND cs.class_id = 1) as position,
+    AND cs.class_id = ?) as position,
     CASE 
         WHEN sh.student_id IS NOT NULL THEN 1
         ELSE 0
@@ -214,7 +214,7 @@ class StudentRepository
     INNER JOIN homework h ON cs.class_id = h.class_id
     LEFT JOIN student_homework sh ON s.student_id = sh.student_id AND h.homework_id = sh.homework_id
     WHERE cs.class_id = ? AND h.homework_id = ? AND h.teacher_id = ?");
-    $stmt->bind_param("iii", $class_id, $homework_id, $teacher_id);
+    $stmt->bind_param("iiii", $class_id, $class_id, $homework_id, $teacher_id);
     $stmt->execute();
     $result = $stmt->get_result();
     $students = [];
