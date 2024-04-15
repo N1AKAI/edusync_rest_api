@@ -197,4 +197,30 @@ class StudentRepository
     $result = $stmt->get_result();
     return $result->fetch_assoc();
   }
+
+  public function getAllClassStudentsHomework($class_id, $homework_id, $teacher_id)
+  {
+    $stmt = $this->con->prepare("SELECT s.student_id, s.first_name, s.last_name, 
+    (SELECT COUNT(*) FROM student s2 
+    INNER JOIN class_student cs ON s2.student_id = cs.student_id
+    WHERE s2.last_name <= s.last_name
+    AND cs.class_id = 1) as position,
+    CASE 
+        WHEN sh.student_id IS NOT NULL THEN 1
+        ELSE 0
+    END AS has_homework
+    FROM student s
+    INNER JOIN class_student cs ON s.student_id = cs.student_id
+    INNER JOIN homework h ON cs.class_id = h.class_id
+    LEFT JOIN student_homework sh ON s.student_id = sh.student_id AND h.homework_id = sh.homework_id
+    WHERE cs.class_id = ? AND h.homework_id = ? AND h.teacher_id = ?");
+    $stmt->bind_param("iii", $class_id, $homework_id, $teacher_id);
+    $stmt->execute();
+    $result = $stmt->get_result();
+    $students = [];
+    while ($row = $result->fetch_assoc()) {
+      $students[] = $row;
+    }
+    return $students;
+  }
 }
