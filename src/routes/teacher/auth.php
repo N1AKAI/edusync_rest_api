@@ -28,6 +28,7 @@ $app->post('/auth/teachers', function (Request $request, Response $response, $ar
       $msg['error'] = false;
       $msg['message'] = 'Login is Successful';
       $msg['token'] = $token;
+      $status = 200;
       break;
     case TEACHER_NOT_FOUND:
     case TEACHER_PASSWORD_DO_NOT_MATCH:
