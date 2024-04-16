@@ -94,7 +94,7 @@ class ClassRepository
   public function getTeachersClasses($id)
   {
 
-    $stmt = $this->con->prepare("SELECT * FROM class
+    $stmt = $this->con->prepare("SELECT DISTINCT * FROM class
     INNER JOIN class_teacher USING (class_id)
     INNER JOIN branch USING (branch_id)
     WHERE teacher_id = ?");
