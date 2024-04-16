@@ -2,23 +2,27 @@
 
 namespace App\Repository;
 
-use App\Database\DatabaseConnection;
+use App\Base\BaseRepository;
 
-class TeacherRepository
+class TeacherRepository extends BaseRepository
 {
 
-  private $con;
-  function __construct()
+  protected $showableFields = ['teacher_id', 'first_name', 'last_name', 'email', 'phone_number', 'gender', 'date_of_birth', 'joining_date', 'qualification', 'experience', 'cne', 'adresse', 'city', 'state', 'zip_code', 'created_at', 'updated_at'];
+
+  protected $insertableFields = ['first_name', 'last_name', 'email', 'password', 'phone_number', 'gender', 'date_of_birth', 'joining_date', 'qualification', 'experience', 'cne', 'adresse', 'city', 'state', 'zip_code'];
+
+  protected $updatableFields = ['first_name', 'last_name', 'email', 'phone_number', 'gender', 'date_of_birth', 'joining_date', 'qualification', 'experience', 'cne', 'adresse', 'city', 'state', 'zip_code'];
+  protected $columnId = "teacher_id";
+
+  public function __construct()
   {
-    $db = new DatabaseConnection;
-    $this->con = $db->connect();
+    parent::__construct("teacher");
   }
-  public function createteacher($first_name, $last_name, $email, $password, $phone_number)
+
+  public function create($data, $passwordField = "")
   {
-    if (!$this->isEmailExist($email)) {
-      $stmt = $this->con->prepare("INSERT INTO teacher(first_name, last_name, email, password, phone_number) VALUES (?,?,?,?,?)");
-      $stmt->bind_param("sssss", $first_name, $last_name, $email, $password, $phone_number);
-      if ($stmt->execute()) {
+    if (!$this->isEmailExist($data["email"])) {
+      if (parent::create($data, $passwordField)) {
         return TEACHER_CREATED;
       } else {
         return TEACHER_FAILUARE;
@@ -42,62 +46,7 @@ class TeacherRepository
   }
   private function getTeacherPasswordByEmail($email)
   {
-    $stmt = $this->con->prepare("SELECT password FROM teacher WHERE email=?");
-    $stmt->bind_param("s", $email);
-    $stmt->execute();
-    $stmt->store_result();
-    $stmt->bind_result($password);
-    $stmt->fetch();
-    return $password;
-  }
-  public function getAllTeachers()
-  {
-    $stmt = $this->con->prepare("SELECT teacher_id,first_name,last_name ,email ,phone_number ,created_at,updated_at
-        FROM teacher;");
-    $stmt->execute();
-    $stmt->bind_result($teacher_id, $first_name, $last_name, $email, $phone_number, $created_at, $updated_at);
-    $teachers = array();
-    while ($stmt->fetch()) {;
-      $teacher = array();
-      $teacher['teacher_id'] = $teacher_id;
-      $teacher['first_name'] = $first_name;
-      $teacher['last_name'] = $last_name;
-      $teacher['email'] = $email;
-      $teacher['phone_number'] = $phone_number;
-      $teacher['created_at'] = $created_at;
-      $teacher['updated_at'] = $updated_at;
-      array_push($teachers, $teacher);
-    }
-    return $teachers;
-  }
-  public function getTeacherByEmail($email)
-  {
-    $stmt = $this->con->prepare("SELECT teacher_id,first_name,last_name ,email ,phone_number ,created_at,updated_at
-         FROM teacher WHERE email=?");
-    $stmt->bind_param("s", $email);
-    $stmt->execute();
-    $stmt->bind_result($teacher_id, $first_name, $last_name, $email, $phone_number, $created_at, $updated_at);
-    $stmt->fetch();
-    $teacher = array();
-    $teacher['teacher_id'] = $teacher_id;
-    $teacher['first_name'] = $first_name;
-    $teacher['last_name'] = $last_name;
-    $teacher['email'] = $email;
-    $teacher['phone_number'] = $phone_number;
-    $teacher['created_at'] = $created_at;
-    $teacher['updated_at'] = $updated_at;
-    return $teacher;
-  }
-  public function updateTeacher($first_name, $last_name, $email, $phone_number, $teacher_id)
-  {
-    $stmt = $this->con->prepare("UPDATE teacher SET first_name = ?, last_name = ?, email = ?, phone_number = ?, updated_at = CURRENT_TIMESTAMP WHERE
-        teacher_id=?");
-    $stmt->bind_param('ssssi', $first_name, $last_name, $email, $phone_number, $teacher_id);
-    $stmt->execute();
-    if ($stmt->affected_rows > 0) {
-      return true;
-    }
-    return false;
+    return $this->getColumnValue('password', 'WHERE email = ?', [$email]);
   }
 
   public function updatePassword($currentpassword, $newpassword, $email)
@@ -105,9 +54,9 @@ class TeacherRepository
     $hashed_password = $this->getTeacherPasswordByEmail($email);
     if (password_verify($currentpassword, $hashed_password)) {
       $hash_password = password_hash($newpassword, PASSWORD_DEFAULT);
-      $stmt = $this->con->prepare("UPDATE teacher SET password = ? WHERE email = ?");
-      $stmt->bind_param('ss', $hash_password, $email);
-      $stmt->execute();
+      $query = "UPDATE teacher SET password = ? WHERE email = ?";
+      $params = [$hash_password, $email];
+      $stmt = $this->executeQuery($query, $params);
       if ($stmt->affected_rows > 0) {
         return PASSWORD_CHANGED;
       }
@@ -117,35 +66,20 @@ class TeacherRepository
     }
   }
 
-  public function deleteTeacher($teacher_id)
+
+  public function isEmailExist($email)
   {
-    $stmt = $this->con->prepare("DELETE FROM teacher WHERE teacher_id=?");
-    $stmt->bind_param("i", $teacher_id);
-    $stmt->execute();
-    if ($stmt->affected_rows > 0) {
-      return true;
-    }
-    return false;
-  }
-  private function isEmailExist($email)
-  {
-    $stmt = $this->con->prepare("SELECT teacher_id FROM teacher WHERE email=?");
-    $stmt->bind_param("s", $email);
-    $stmt->execute();
-    $stmt->store_result();
-    return $stmt->num_rows > 0;
+    $stmt = $this->executeQuery("SELECT teacher_id FROM teacher WHERE email = ?", [$email]);
+    return $stmt->fetch();
   }
 
   public function getTeacherAndTheirClassesByEmail($email)
   {
-    $stmt = $this->con->prepare("SELECT teacher_id, first_name, last_name, email,
+    $stmt = $this->executeQuery("SELECT teacher_id, first_name, last_name, email,
     phone_number, date_of_birth, GROUP_CONCAT(class_teacher.class_id) AS class_ids
     FROM teacher
     INNER JOIN class_teacher USING(teacher_id)
-    WHERE teacher.email = ?");
-
-    $stmt->bind_param("s", $email);
-    $stmt->execute();
+    WHERE teacher.email = ?", [$email]);
     $result = $stmt->get_result();
     $row = $result->fetch_assoc();
     $row['class_ids'] = explode(",", $row['class_ids']);
