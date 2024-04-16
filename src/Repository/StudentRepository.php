@@ -2,17 +2,18 @@
 
 namespace App\Repository;
 
+use App\Base\BaseRepository;
+use App\Common\JsonResponse;
 use App\Database\DatabaseConnection;
 
-class StudentRepository
+class StudentRepository extends BaseRepository
 {
 
-  private $con;
   function __construct()
   {
-    $db = new DatabaseConnection;
-    $this->con = $db->connect();
+    parent::__construct("student");
   }
+
   public function createStudent($first_name, $last_name,  $phone_number,  $fathers_name, $mothers_name, $join_date, $email, $password)
   {
     if (!$this->isEmailExist($email)) {
@@ -222,5 +223,16 @@ class StudentRepository
       $students[] = $row;
     }
     return $students;
+  }
+
+  public function getStudentsClass($id)
+  {
+    $query = "SELECT student_id, first_name, last_name, date_of_birth,
+    phone_number, fathers_name, mothers_name, join_date, email FROM student
+    INNER JOIN class_student USING (student_id)
+    WHERE class_id = ?";
+    $params = [$id];
+    $stmt = $this->executeQuery($query, $params);
+    return $this->getAll($stmt);
   }
 }

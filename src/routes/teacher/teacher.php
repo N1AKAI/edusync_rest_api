@@ -3,6 +3,7 @@
 use App\Common\JsonResponse;
 use App\Lib\JWTAuth;
 use App\Repository\ClassRepository;
+use App\Repository\ClassTeacherRepository;
 use App\Repository\HomeworkRepository;
 use App\Repository\StudentRepository;
 use App\Repository\TeacherRepository;
@@ -58,7 +59,11 @@ $app->get("/teacher/class/{classId}/homeworks/{homeworkId}", function (Request $
 
 $app->post("/teacher/homeworks", function (Request $request, Response $response, array $args) {
 
+  $token = str_replace("Bearer ", "", $request->getHeaderLine('Authorization'));
+  $tokenData = JWTAuth::getData($token);
+
   $data = $request->getParsedBody();
+  $data['teacher_id'] = $tokenData->id;
 
   $msg['error'] = true;
   $msg['message'] = "Something went wrong!";
@@ -71,4 +76,30 @@ $app->post("/teacher/homeworks", function (Request $request, Response $response,
   }
 
   return JsonResponse::send($response, $msg, $status);
+});
+
+$app->get("/teacher/class/{classId}/course", function (Request $request, Response $response, array $args) {
+
+  $token = str_replace("Bearer ", "", $request->getHeaderLine('Authorization'));
+  $data = JWTAuth::getData($token);
+
+  $classId = $args['classId'];
+
+  $repo = new ClassTeacherRepository;
+  $courses = $repo->getCourseByClassId($classId, $data->id);
+
+  return JsonResponse::send($response, $courses);
+});
+
+$app->get("/teacher/class/{classId}/students", function (Request $request, Response $response, array $args) {
+
+  $token = str_replace("Bearer ", "", $request->getHeaderLine('Authorization'));
+  $data = JWTAuth::getData($token);
+
+  $classId = $args['classId'];
+
+  $repo = new StudentRepository;
+  $student = $repo->getStudentsClass($classId, $data->id);
+
+  return JsonResponse::send($response, $student);
 });
