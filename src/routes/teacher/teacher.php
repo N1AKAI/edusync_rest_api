@@ -55,3 +55,20 @@ $app->get("/teacher/class/{classId}/homeworks/{homeworkId}", function (Request $
 
   return JsonResponse::send($response, $students);
 });
+
+$app->post("/teacher/homeworks", function (Request $request, Response $response, array $args) {
+
+  $data = $request->getParsedBody();
+
+  $msg['error'] = true;
+  $msg['message'] = "Something went wrong!";
+  $status = 200;
+  $repo = new HomeworkRepository;
+  if ($repo->create($data)) {
+    $msg['error'] = false;
+    $msg['message'] = "Created successfully!";
+    $status = 201;
+  }
+
+  return JsonResponse::send($response, $msg, $status);
+});
