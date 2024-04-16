@@ -139,6 +139,6 @@ $app->get("/teacher/courses", function (Request $request, Response $response, ar
 
   $repo = new CourseRepository;
   $courses = $repo->getTeacherCourses($data->id);
-  print_r($courses);
+
   return JsonResponse::send($response, $courses);
 });
