@@ -2,8 +2,11 @@
 
 use App\Common\JsonResponse;
 use App\Lib\JWTAuth;
+use App\Repository\AbsentStudentsRepository;
+use App\Repository\AttendanceRepository;
 use App\Repository\ClassRepository;
 use App\Repository\ClassTeacherRepository;
+use App\Repository\CourseRepository;
 use App\Repository\HomeworkRepository;
 use App\Repository\StudentRepository;
 use App\Repository\TeacherRepository;
@@ -93,13 +96,49 @@ $app->get("/teacher/class/{classId}/course", function (Request $request, Respons
 
 $app->get("/teacher/class/{classId}/students", function (Request $request, Response $response, array $args) {
 
-  $token = str_replace("Bearer ", "", $request->getHeaderLine('Authorization'));
-  $data = JWTAuth::getData($token);
-
   $classId = $args['classId'];
 
   $repo = new StudentRepository;
-  $student = $repo->getStudentsClass($classId, $data->id);
+  $student = $repo->getClassStudents($classId);
 
   return JsonResponse::send($response, $student);
+});
+
+$app->post("/teacher/absent", function (Request $request, Response $response, array $args) {
+
+  $token = str_replace("Bearer ", "", $request->getHeaderLine('Authorization'));
+  $tokenData = JWTAuth::getData($token);
+
+  $allData = $request->getParsedBody();
+
+  $repo = new AbsentStudentsRepository;
+
+  $msg = [];
+  $status = 200;
+
+  foreach ($allData as $data) {
+    $data['teacher_id'] = $tokenData->id;
+    $msg['error'] = true;
+    $msg['message'] = "Failed!";
+    $status = 422;
+
+    if ($repo->registerAttendance($data)) {
+      $msg['error'] = false;
+      $msg['message'] = "Registered successfully!";
+      $status = 201;
+    }
+  }
+
+  return JsonResponse::send($response, $msg, $status);
+});
+
+$app->get("/teacher/courses", function (Request $request, Response $response, array $args) {
+
+  $token = str_replace("Bearer ", "", $request->getHeaderLine('Authorization'));
+  $data = JWTAuth::getData($token);
+
+  $repo = new CourseRepository;
+  $courses = $repo->getTeacherCourses($data->id);
+
+  return JsonResponse::send($response, $courses);
 });

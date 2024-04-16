@@ -2,15 +2,19 @@
 
 namespace App\Repository;
 
-use App\Database\DatabaseConnection;
+use App\Base\BaseRepository;
 
-class CourseRepository
+class CourseRepository extends BaseRepository
 {
-  private $con;
+  protected $showableFields = ['course_id', 'course_name', 'course_code', 'MHT', 'Coef', 'created_at', 'updated_at'];
+
+  protected $insertableFields = ['course_name', 'course_code', 'MHT', 'Coef'];
+
+  protected $updatableFields = ['course_name', 'course_code', 'MHT', 'Coef'];
+  protected $columnId = "course_id";
   function __construct()
   {
-    $db = new DatabaseConnection;
-    $this->con = $db->connect();
+    parent::__construct("course");
   }
   public function createCourse($course_name, $course_code)
   {
@@ -72,5 +76,17 @@ class CourseRepository
       return true;
     }
     return false;
+  }
+
+  public function getTeacherCourses($id)
+  {
+    $query = "SELECT * FROM course
+    INNER JOIN class_teacher USING (course_id)
+    INNER JOIN class USING (class_id)
+    INNER JOIN branch USING (branch_id)
+    WHERE teacher_id = ?";
+    $params = [$id];
+    $stmt = $this->executeQuery($query, $params);
+    return $this->getAll($stmt);
   }
 }

@@ -14,11 +14,11 @@ class StudentRepository extends BaseRepository
     parent::__construct("student");
   }
 
-  public function createStudent($first_name, $last_name,  $phone_number,  $fathers_name, $mothers_name, $join_date, $email, $password)
+  public function createStudent($first_name, $last_name, $phone_number, $fathers_name, $mothers_name, $join_date, $email, $password)
   {
     if (!$this->isEmailExist($email)) {
       $stmt = $this->con->prepare("INSERT INTO student(first_name, last_name,  phone_number,fathers_name, mothers_name, join_date, email, password) VALUES (?,?,?,?,?,?,?,?)");
-      $stmt->bind_param("ssssssss", $first_name, $last_name,  $phone_number,  $fathers_name, $mothers_name, $join_date, $email, $password);
+      $stmt->bind_param("ssssssss", $first_name, $last_name, $phone_number, $fathers_name, $mothers_name, $join_date, $email, $password);
       if ($stmt->execute()) {
         return STUDENT_CREATED;
       } else {
@@ -58,9 +58,10 @@ class StudentRepository extends BaseRepository
     $stmt = $this->con->prepare("SELECT student_id,first_name, last_name,  phone_number,fathers_name, mothers_name, join_date, email,created_at,updated_at
         FROM student;");
     $stmt->execute();
-    $stmt->bind_result($student_id, $first_name, $last_name,  $phone_number, $fathers_name, $mothers_name, $join_date, $email, $created_at, $updated_at);
+    $stmt->bind_result($student_id, $first_name, $last_name, $phone_number, $fathers_name, $mothers_name, $join_date, $email, $created_at, $updated_at);
     $students = array();
-    while ($stmt->fetch()) {;
+    while ($stmt->fetch()) {
+      ;
       $student = array();
       $student['student_id'] = $student_id;
       $student['first_name'] = $first_name;
@@ -82,7 +83,7 @@ class StudentRepository extends BaseRepository
          FROM student WHERE email=?");
     $stmt->bind_param("s", $email);
     $stmt->execute();
-    $stmt->bind_result($student_id, $first_name, $last_name,  $phone_number, $fathers_name, $mothers_name, $join_date, $email, $created_at, $updated_at);
+    $stmt->bind_result($student_id, $first_name, $last_name, $phone_number, $fathers_name, $mothers_name, $join_date, $email, $created_at, $updated_at);
     $stmt->fetch();
     $student = array();
     $student['student_id'] = $student_id;
@@ -97,11 +98,11 @@ class StudentRepository extends BaseRepository
     $student['updated_at'] = $updated_at;
     return $student;
   }
-  public function updateStudent($first_name, $last_name,  $phone_number, $fathers_name, $mothers_name, $join_date, $student_id)
+  public function updateStudent($first_name, $last_name, $phone_number, $fathers_name, $mothers_name, $join_date, $student_id)
   {
     $stmt = $this->con->prepare("UPDATE student SET first_name = ?, last_name = ?, phone_number = ?, fathers_name = ?,mothers_name = ?,join_date = ?, updated_at = CURRENT_TIMESTAMP WHERE
         student_id=?");
-    $stmt->bind_param('ssssssi', $first_name, $last_name,  $phone_number, $fathers_name, $mothers_name, $join_date, $student_id);
+    $stmt->bind_param('ssssssi', $first_name, $last_name, $phone_number, $fathers_name, $mothers_name, $join_date, $student_id);
     $stmt->execute();
     if ($stmt->affected_rows) {
       return true;
@@ -225,13 +226,18 @@ class StudentRepository extends BaseRepository
     return $students;
   }
 
-  public function getStudentsClass($id)
+  public function getClassStudents($id)
   {
     $query = "SELECT student_id, first_name, last_name, date_of_birth,
-    phone_number, fathers_name, mothers_name, join_date, email FROM student
+    phone_number, fathers_name, mothers_name, join_date, email,
+    (SELECT COUNT(*) FROM student s2 
+    INNER JOIN class_student cs ON s2.student_id = cs.student_id
+    WHERE s2.last_name <= s.last_name
+    AND cs.class_id = ?) as position
+    FROM student s
     INNER JOIN class_student USING (student_id)
     WHERE class_id = ?";
-    $params = [$id];
+    $params = [$id, $id];
     $stmt = $this->executeQuery($query, $params);
     return $this->getAll($stmt);
   }

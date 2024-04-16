@@ -76,7 +76,7 @@ class TeacherRepository extends BaseRepository
   public function getTeacherAndTheirClassesByEmail($email)
   {
     $stmt = $this->executeQuery("SELECT teacher_id, first_name, last_name, email,
-    phone_number, date_of_birth, cne, GROUP_CONCAT(class_teacher.class_id) AS class_ids
+    phone_number, date_of_birth, cne, date_of_birth, qualification, experience, adresse, GROUP_CONCAT(class_teacher.class_id) AS class_ids
     FROM teacher
     INNER JOIN class_teacher USING(teacher_id)
     WHERE teacher.email = ?", [$email]);

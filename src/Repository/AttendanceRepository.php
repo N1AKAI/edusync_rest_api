@@ -2,15 +2,20 @@
 
 namespace App\Repository;
 
-use App\Database\DatabaseConnection;
+use App\Base\BaseRepository;
 
-class AttendanceRepository
+class AttendanceRepository extends BaseRepository
 {
-  private $con;
+  protected $showableFields = ['attendance_id', 'student_id', 'date', 'class_id', 'teacher_id', 'is_absent', 'start_time', 'end_time'];
+
+  protected $insertableFields = ['student_id', 'date', 'class_id', 'teacher_id', 'is_absent', 'start_time', 'end_time'];
+
+  protected $updatableFields = ['student_id', 'date', 'class_id', 'teacher_id', 'is_absent', 'start_time', 'end_time'];
+  protected $columnId = "attendance_id";
+
   function __construct()
   {
-    $db = new DatabaseConnection;
-    $this->con = $db->connect();
+    parent::__construct("attendance");
   }
 
   public function getStudentsAttendace($id)
@@ -46,5 +51,10 @@ class AttendanceRepository
       $attendances[] = $row;
     }
     return $attendances;
+  }
+
+  public function registerAttendance($data)
+  {
+    return $this->create($data);
   }
 }

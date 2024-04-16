@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Apr 15, 2024 at 06:44 PM
+-- Generation Time: Apr 16, 2024 at 11:43 PM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.2.12
 
@@ -20,6 +20,36 @@ SET time_zone = "+00:00";
 --
 -- Database: `edusync_v2`
 --
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `absent_students`
+--
+
+CREATE TABLE `absent_students` (
+  `absent_students_id` int(11) NOT NULL,
+  `student_id` int(11) NOT NULL,
+  `teacher_id` int(11) NOT NULL,
+  `class_id` int(11) NOT NULL,
+  `date` date NOT NULL,
+  `start_time` time NOT NULL,
+  `end_time` time NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `absent_students`
+--
+
+INSERT INTO `absent_students` (`absent_students_id`, `student_id`, `teacher_id`, `class_id`, `date`, `start_time`, `end_time`) VALUES
+(1, 1, 13, 2, '2024-04-16', '08:30:00', '10:30:00'),
+(2, 4, 13, 2, '2024-04-16', '08:30:00', '10:30:00'),
+(3, 3, 13, 1, '2024-04-16', '14:30:00', '16:30:00'),
+(4, 3, 13, 1, '2024-04-16', '08:30:00', '12:30:00'),
+(5, 3, 13, 1, '2024-04-16', '10:30:00', '12:30:00'),
+(6, 1, 13, 2, '2024-04-16', '10:30:00', '12:30:00'),
+(7, 4, 13, 2, '2024-04-16', '10:30:00', '12:30:00'),
+(8, 5, 13, 2, '2024-04-16', '10:30:00', '12:30:00');
 
 -- --------------------------------------------------------
 
@@ -109,6 +139,9 @@ CREATE TABLE `attendance` (
   `is_present` tinyint(4) DEFAULT 0,
   `class_id` int(11) DEFAULT NULL,
   `teacher_id` int(11) DEFAULT NULL,
+  `is_absent` tinyint(1) NOT NULL,
+  `start_time` time NOT NULL,
+  `end_time` time NOT NULL,
   `session_id` int(11) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
@@ -116,10 +149,11 @@ CREATE TABLE `attendance` (
 -- Dumping data for table `attendance`
 --
 
-INSERT INTO `attendance` (`attendance_id`, `student_id`, `date`, `is_present`, `class_id`, `teacher_id`, `session_id`) VALUES
-(1, 2, '2023-10-19', 0, 1, 13, 2),
-(2, 1, '2023-11-02', 0, 1, 13, 4),
-(3, 4, '2024-01-04', 2, 4, 13, 3);
+INSERT INTO `attendance` (`attendance_id`, `student_id`, `date`, `is_present`, `class_id`, `teacher_id`, `is_absent`, `start_time`, `end_time`, `session_id`) VALUES
+(1, 2, '2023-10-19', 0, 1, 13, 0, '00:00:00', '00:00:00', 2),
+(2, 1, '2023-11-02', 0, 1, 13, 0, '00:00:00', '00:00:00', 4),
+(3, 4, '2024-01-04', 2, 4, 13, 0, '00:00:00', '00:00:00', 3),
+(4, 1, '0000-00-00', 0, 2, 13, 1, '08:30:00', '10:30:00', NULL);
 
 -- --------------------------------------------------------
 
@@ -253,7 +287,11 @@ INSERT INTO `class_teacher` (`id`, `class_id`, `teacher_id`, `course_id`) VALUES
 (1, 1, 13, 6),
 (2, 2, 13, 6),
 (3, 3, 13, 6),
-(4, 4, 13, 6);
+(4, 4, 13, 6),
+(5, 1, 13, 4),
+(6, 2, 13, 1),
+(7, 2, 13, 3),
+(9, 1, 13, 1);
 
 -- --------------------------------------------------------
 
@@ -265,6 +303,8 @@ CREATE TABLE `course` (
   `course_id` int(11) NOT NULL,
   `course_name` varchar(45) DEFAULT NULL,
   `course_code` varchar(45) DEFAULT NULL,
+  `MHT` int(11) NOT NULL,
+  `Coef` int(11) NOT NULL,
   `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
   `updated_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
@@ -273,42 +313,42 @@ CREATE TABLE `course` (
 -- Dumping data for table `course`
 --
 
-INSERT INTO `course` (`course_id`, `course_name`, `course_code`, `created_at`, `updated_at`) VALUES
-(1, 'Bases du développement android', 'M201', '2023-08-31 23:00:00', NULL),
-(2, 'Exel', 'M208', '2023-08-31 23:00:00', NULL),
-(3, 'Métier et formation ', 'M101', '2023-08-31 23:00:00', NULL),
-(4, 'Anglais technique', 'EGTS103', '2023-08-31 23:00:00', NULL),
-(5, 'Arabe', 'EGTS101', '2023-08-31 23:00:00', NULL),
-(6, 'Français', 'EGTS102', '2023-08-31 23:00:00', NULL),
-(7, 'Culture entrepreneuriale-Partie 1', 'EGTS104', '2023-08-31 23:00:00', NULL),
-(8, 'Compétences comportementales et sociales', 'EGTS105', '2023-08-31 23:00:00', NULL),
-(9, 'Entrepreneuriat-PIE 1', 'EGTS108', '2023-08-31 23:00:00', NULL),
-(10, 'Culture et techniques avancées du numérique', 'EGTSA106', '2023-08-31 23:00:00', NULL),
-(11, 'Acquérir les bases de l’algorithmique', 'M102', '2024-04-14 09:36:15', NULL),
-(12, 'Programmer en Orienté Objet', 'M103', '2024-04-14 09:36:15', NULL),
-(13, 'Développer des sites web statiques', 'M104', '2024-04-14 09:36:15', NULL),
-(14, 'Programmer en JavaScript', 'M105', '2024-04-14 09:36:15', NULL),
-(15, 'Manipuler des bases de données', 'M106', '2024-04-14 09:36:15', NULL),
-(16, 'Développer des sites web dynamiques', 'M107', '2024-04-14 09:36:15', NULL),
-(17, 'S’initier à la sécurité des systèmes d’inform', 'M108', '2024-04-14 09:36:15', NULL),
-(18, 'Droit fondamental', 'M102', '2024-04-14 09:48:05', NULL),
-(19, 'Management des organisations', 'M103', '2024-04-14 09:48:05', NULL),
-(20, 'Comptabilité générale 1', 'M104', '2024-04-14 09:48:05', NULL),
-(21, 'Gestion électronique des données', 'M105', '2024-04-14 09:48:05', NULL),
-(22, 'Marketing', 'M106', '2024-04-14 09:48:05', NULL),
-(23, 'Comptabilité générale 2', 'M107', '2024-04-14 09:48:05', NULL),
-(24, 'Ecrits professionnels', 'M108', '2024-04-14 09:48:05', NULL),
-(25, 'Statistique', 'M109', '2024-04-14 09:48:05', NULL),
-(26, 'Logiciel de Gestion Commerciale, Comptable', 'M110', '2024-04-14 09:48:05', NULL),
-(27, 'Bases du développement Android', 'M201', '2024-04-14 11:39:41', NULL),
-(28, 'Programmation KOTLIN', 'M202', '2024-04-14 11:39:41', NULL),
-(29, 'Gestion de projet ', 'M203', '2024-04-14 11:39:41', NULL),
-(30, 'Initiation aux composants et modèle d’une app', 'M204', '2024-04-14 11:39:41', NULL),
-(31, 'Développement des interfaces utilisateurs sou', 'M205', '2024-04-14 11:39:41', NULL),
-(32, 'Elaboration d’une application Android sécuris', 'M206', '2024-04-14 11:39:41', NULL),
-(33, 'Développement des applications IOS ', 'M207', '2024-04-14 11:39:41', NULL),
-(34, 'Développement multiplateforme ', 'M208', '2024-04-14 11:39:41', NULL),
-(35, 'Intégration du milieu professionnel', 'M209', '2024-04-14 11:39:41', NULL);
+INSERT INTO `course` (`course_id`, `course_name`, `course_code`, `MHT`, `Coef`, `created_at`, `updated_at`) VALUES
+(1, 'Bases du développement android', 'M201', 90, 3, '2023-08-31 23:00:00', NULL),
+(2, 'Exel', 'M208', 60, 2, '2023-08-31 23:00:00', NULL),
+(3, 'Métier et formation ', 'M101', 30, 1, '2023-08-31 23:00:00', NULL),
+(4, 'Anglais technique', 'EGTS103', 60, 2, '2023-08-31 23:00:00', NULL),
+(5, 'Arabe', 'EGTS101', 50, 2, '2023-08-31 23:00:00', NULL),
+(6, 'Français', 'EGTS102', 30, 1, '2023-08-31 23:00:00', NULL),
+(7, 'Culture entrepreneuriale-Partie 1', 'EGTS104', 115, 1, '2023-08-31 23:00:00', NULL),
+(8, 'Compétences comportementales et sociales', 'EGTS105', 60, 2, '2023-08-31 23:00:00', NULL),
+(9, 'Entrepreneuriat-PIE 1', 'EGTS108', 90, 2, '2023-08-31 23:00:00', NULL),
+(10, 'Culture et techniques avancées du numérique', 'EGTSA106', 60, 2, '2023-08-31 23:00:00', NULL),
+(11, 'Acquérir les bases de l’algorithmique', 'M102', 100, 2, '2024-04-14 09:36:15', NULL),
+(12, 'Programmer en Orienté Objet', 'M103', 90, 2, '2024-04-14 09:36:15', NULL),
+(13, 'Développer des sites web statiques', 'M104', 80, 2, '2024-04-14 09:36:15', NULL),
+(14, 'Programmer en JavaScript', 'M105', 80, 2, '2024-04-14 09:36:15', NULL),
+(15, 'Manipuler des bases de données', 'M106', 60, 2, '2024-04-14 09:36:15', NULL),
+(16, 'Développer des sites web dynamiques', 'M107', 80, 2, '2024-04-14 09:36:15', NULL),
+(17, 'S’initier à la sécurité des systèmes d’inform', 'M108', 60, 2, '2024-04-14 09:36:15', NULL),
+(18, 'Droit fondamental', 'M102', 50, 2, '2024-04-14 09:48:05', NULL),
+(19, 'Management des organisations', 'M103', 60, 2, '2024-04-14 09:48:05', NULL),
+(20, 'Comptabilité générale 1', 'M104', 45, 2, '2024-04-14 09:48:05', NULL),
+(21, 'Gestion électronique des données', 'M105', 60, 2, '2024-04-14 09:48:05', NULL),
+(22, 'Marketing', 'M106', 75, 2, '2024-04-14 09:48:05', NULL),
+(23, 'Comptabilité générale 2', 'M107', 60, 2, '2024-04-14 09:48:05', NULL),
+(24, 'Ecrits professionnels', 'M108', 60, 2, '2024-04-14 09:48:05', NULL),
+(25, 'Statistique', 'M109', 60, 2, '2024-04-14 09:48:05', NULL),
+(26, 'Logiciel de Gestion Commerciale, Comptable', 'M110', 60, 2, '2024-04-14 09:48:05', NULL),
+(27, 'Bases du développement Android', 'M201', 100, 2, '2024-04-14 11:39:41', NULL),
+(28, 'Programmation KOTLIN', 'M202', 90, 2, '2024-04-14 11:39:41', NULL),
+(29, 'Gestion de projet ', 'M203', 60, 2, '2024-04-14 11:39:41', NULL),
+(30, 'Initiation aux composants et modèle d’une app', 'M204', 90, 2, '2024-04-14 11:39:41', NULL),
+(31, 'Développement des interfaces utilisateurs sou', 'M205', 60, 2, '2024-04-14 11:39:41', NULL),
+(32, 'Elaboration d’une application Android sécuris', 'M206', 80, 2, '2024-04-14 11:39:41', NULL),
+(33, 'Développement des applications IOS ', 'M207', 60, 2, '2024-04-14 11:39:41', NULL),
+(34, 'Développement multiplateforme ', 'M208', 90, 2, '2024-04-14 11:39:41', NULL),
+(35, 'Intégration du milieu professionnel', 'M209', 100, 2, '2024-04-14 11:39:41', NULL);
 
 -- --------------------------------------------------------
 
@@ -375,6 +415,7 @@ CREATE TABLE `homework` (
   `teacher_id` int(11) DEFAULT NULL,
   `course_id` int(11) DEFAULT NULL,
   `homework` varchar(255) DEFAULT NULL,
+  `description` text NOT NULL,
   `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
   `updated_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
@@ -383,17 +424,17 @@ CREATE TABLE `homework` (
 -- Dumping data for table `homework`
 --
 
-INSERT INTO `homework` (`homework_id`, `class_id`, `teacher_id`, `course_id`, `homework`, `created_at`, `updated_at`) VALUES
-(1, 1, 13, 4, 'Exercice', '2024-04-06 12:17:21', NULL),
-(2, 2, 13, 1, 'Tp en poo', '2024-04-06 12:17:21', NULL),
-(3, 4, 13, 3, 'Trouver un entrepreneur', '2024-04-06 12:17:21', NULL),
-(16, 1, 13, 4, 'Creative Writing', '2024-04-07 14:17:48', NULL),
-(17, 1, 13, 4, 'Grammar and Vocabulary', '2024-04-07 14:17:48', NULL),
-(18, 1, 13, 4, 'Research and Report', '2024-04-07 14:17:48', NULL),
-(19, 1, 13, 1, 'Basic Java Program', '2024-04-07 14:17:48', NULL),
-(20, 1, 13, 1, 'Java Loops and Conditionals', '2024-04-07 14:17:48', NULL),
-(21, 1, 13, 1, 'Polymorphisme', '2024-04-07 20:28:39', NULL),
-(22, 1, 13, 1, 'Exception and Try/Catch', '2024-04-07 20:28:39', NULL);
+INSERT INTO `homework` (`homework_id`, `class_id`, `teacher_id`, `course_id`, `homework`, `description`, `created_at`, `updated_at`) VALUES
+(1, 1, 13, 4, 'Exercice', '', '2024-04-06 12:17:21', NULL),
+(2, 2, 13, 1, 'Tp en poo', '', '2024-04-06 12:17:21', NULL),
+(3, 2, 13, 3, 'Trouver un entrepreneur', '', '2024-04-06 12:17:21', NULL),
+(16, 1, 13, 4, 'Creative Writing', '', '2024-04-07 14:17:48', NULL),
+(17, 1, 13, 4, 'Grammar and Vocabulary', '', '2024-04-07 14:17:48', NULL),
+(18, 1, 13, 4, 'Research and Report', '', '2024-04-07 14:17:48', NULL),
+(19, 1, 13, 1, 'Basic Java Program', '', '2024-04-07 14:17:48', NULL),
+(20, 1, 13, 1, 'Java Loops and Conditionals', '', '2024-04-07 14:17:48', NULL),
+(21, 1, 13, 1, 'Polymorphisme', '', '2024-04-07 20:28:39', NULL),
+(22, 1, 13, 1, 'Exception and Try/Catch', '', '2024-04-07 20:28:39', NULL);
 
 -- --------------------------------------------------------
 
@@ -659,6 +700,12 @@ INSERT INTO `test_online_student` (`test_online_id`, `student_id`, `score`) VALU
 --
 
 --
+-- Indexes for table `absent_students`
+--
+ALTER TABLE `absent_students`
+  ADD PRIMARY KEY (`absent_students_id`);
+
+--
 -- Indexes for table `admin`
 --
 ALTER TABLE `admin`
@@ -823,6 +870,12 @@ ALTER TABLE `test_online_student`
 --
 
 --
+-- AUTO_INCREMENT for table `absent_students`
+--
+ALTER TABLE `absent_students`
+  MODIFY `absent_students_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
+
+--
 -- AUTO_INCREMENT for table `admin`
 --
 ALTER TABLE `admin`
@@ -838,7 +891,7 @@ ALTER TABLE `answer`
 -- AUTO_INCREMENT for table `attendance`
 --
 ALTER TABLE `attendance`
-  MODIFY `attendance_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `attendance_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
 -- AUTO_INCREMENT for table `branch`
@@ -862,7 +915,7 @@ ALTER TABLE `class_student`
 -- AUTO_INCREMENT for table `class_teacher`
 --
 ALTER TABLE `class_teacher`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
 
 --
 -- AUTO_INCREMENT for table `course`
@@ -1048,21 +1101,6 @@ ALTER TABLE `test_online`
 ALTER TABLE `test_online_student`
   ADD CONSTRAINT ` test_online_student_student` FOREIGN KEY (`student_id`) REFERENCES `student` (`student_id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
   ADD CONSTRAINT `test_online_student_test_online` FOREIGN KEY (`test_online_id`) REFERENCES `test_online` (`test_online_id`) ON DELETE NO ACTION ON UPDATE NO ACTION;
-
-DELIMITER $$
---
--- Events
---
-CREATE DEFINER=`root`@`localhost` EVENT `insert fee` ON SCHEDULE EVERY 1 MONTH STARTS '2023-09-01 14:40:12' ENDS '2024-07-01 14:40:12' ON COMPLETION NOT PRESERVE ENABLE DO INSERT INTO fee (fee_id, student_id, fee_description, total_fee, fee_date, is_paid)
-SELECT null,
-       student_id,
-       CONCAT('School Fee for ', MONTHNAME(CURRENT_DATE)) AS fee_description,
-       500,
-       CURRENT_DATE,
-       0
-FROM student$$
-
-DELIMITER ;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
