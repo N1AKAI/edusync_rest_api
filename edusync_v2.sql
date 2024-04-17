@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Apr 16, 2024 at 11:43 PM
+-- Generation Time: Apr 17, 2024 at 02:42 AM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.2.12
 
@@ -264,7 +264,26 @@ INSERT INTO `class_student` (`class_id`, `student_id`, `id`) VALUES
 (1, 3, 2),
 (2, 1, 3),
 (2, 4, 4),
-(2, 5, 5);
+(2, 5, 5),
+(1, 19, 6),
+(1, 22, 7),
+(1, 14, 8),
+(1, 11, 9),
+(2, 7, 10),
+(2, 12, 11),
+(2, 14, 12),
+(3, 8, 13),
+(3, 9, 14),
+(3, 13, 15),
+(3, 23, 16),
+(3, 18, 17),
+(4, 21, 18),
+(4, 20, 19),
+(4, 16, 20),
+(4, 15, 21),
+(4, 6, 22),
+(2, 25, 23),
+(3, 24, 24);
 
 -- --------------------------------------------------------
 
@@ -550,9 +569,9 @@ CREATE TABLE `student` (
   `email` varchar(255) NOT NULL,
   `password` varchar(255) NOT NULL,
   `avatar` varchar(255) DEFAULT NULL,
-  `otp` varchar(255) NOT NULL,
+  `otp` varchar(255) DEFAULT NULL,
   `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
-  `updated_at` timestamp NOT NULL DEFAULT current_timestamp()
+  `updated_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
@@ -560,11 +579,30 @@ CREATE TABLE `student` (
 --
 
 INSERT INTO `student` (`student_id`, `first_name`, `last_name`, `date_of_birth`, `phone_number`, `fathers_name`, `mothers_name`, `join_date`, `email`, `password`, `avatar`, `otp`, `created_at`, `updated_at`) VALUES
-(1, 'Fatima Ezzahra', 'Baba', '2004-10-19', '0775729368', 'Rachid', 'Karima', '2023-10-03', 'babafatimaezzahra434@gmail.com', 'baba@babafz', NULL, 'OTkzNjY=', '2023-10-04 11:58:48', '2023-10-04 11:58:48'),
-(2, 'Saad', 'Aboulhoda', '2003-01-30', '0671670183', 'Miloud', 'Fatima', '2023-09-21', 'rakansubs@gmail.com', '$2y$10$iffeXiN0s2dU2jbsHtKIc.9CyQFzs82oUywqSJj0E8zgOSXym9/oK', NULL, '', '2023-09-21 12:03:22', '2024-02-05 11:03:22'),
-(3, 'Hamza', 'El Hourch', '2004-06-15', '062901625', 'Ahmed', 'Fatima', '2023-11-01', 'elhorchhamza@gmail.com', 'hamza@hamza', NULL, 'OTkzNjY=', '2023-11-01 12:07:48', '2024-03-29 15:07:48'),
-(4, 'Halima', 'Bezaz', '2004-04-08', '0613060106', 'Hassan', 'Amina', '2023-10-10', 'bzazhalima@gmail.com', 'halima@hailma', NULL, 'OTkzNjY=', '2023-10-10 12:10:07', '2023-12-02 09:10:07'),
-(5, 'Kawter', 'El Azrak', '2003-04-22', '0603848212', 'Amin', 'Naziha', '2023-09-30', 'elazrakkawter@gmail.com', 'kawter@kawter', NULL, 'OTkzNjY=', '2023-09-30 13:12:10', '2024-03-03 12:12:10');
+(1, 'Fatima Ezzahra', 'Baba', '2004-10-19', '0775729368', 'Rachid', 'Karima', '2022-09-01', 'babafatimaezzahra434@gmail.com', '$2y$10$XAijexiokMq8AeooE8gUeePUDbCSaf6/dkKzm0dFa1SxPMlL0KxuS', NULL, '', '2023-10-04 11:58:48', '2023-10-04 11:58:48'),
+(2, 'Saad', 'Aboulhoda', '2003-01-30', '0671670183', 'Miloud', 'Fatima', '2022-09-01', 'rakansubs@gmail.com', '$2y$10$iffeXiN0s2dU2jbsHtKIc.9CyQFzs82oUywqSJj0E8zgOSXym9/oK', NULL, '', '2023-09-21 12:03:22', '2024-02-05 11:03:22'),
+(3, 'Hamza', 'El Hourch', '2004-06-15', '062901625', 'Ahmed', 'Fatima', '2022-09-01', 'elhorchhamza@gmail.com', '$2y$10$XAijexiokMq8AeooE8gUeePUDbCSaf6/dkKzm0dFa1SxPMlL0KxuS', NULL, '', '2023-11-01 12:07:48', '2024-03-29 15:07:48'),
+(4, 'Halima', 'Bezaz', '2004-04-08', '0613060106', 'Hassan', 'Amina', '2022-09-01', 'bzazhalima@gmail.com', '$2y$10$XAijexiokMq8AeooE8gUeePUDbCSaf6/dkKzm0dFa1SxPMlL0KxuS', NULL, '', '2023-10-10 12:10:07', '2023-12-02 09:10:07'),
+(5, 'Kawter', 'El Azrak', '2003-04-22', '0603848212', 'Amin', 'Naziha', '2022-09-01', 'elazrakkawter@gmail.com', '$2y$10$XAijexiokMq8AeooE8gUeePUDbCSaf6/dkKzm0dFa1SxPMlL0KxuS', NULL, '', '2023-09-30 13:12:10', '2024-03-03 12:12:10'),
+(6, 'AHMED', 'AL GHAZALY', '2002-11-29', '', '', '', '2022-09-01', 'AHMED.AL.GHAZALY@edusync.ma', '$2y$10$XAijexiokMq8AeooE8gUeePUDbCSaf6/dkKzm0dFa1SxPMlL0KxuS', NULL, NULL, '2024-04-17 00:16:07', NULL),
+(7, 'CHAIMAE', 'BAKKA', '2002-06-27', '', '', '', '2022-09-01', 'CHAIMAE.BAKKA@edusync.ma', '$2y$10$XAijexiokMq8AeooE8gUeePUDbCSaf6/dkKzm0dFa1SxPMlL0KxuS', NULL, NULL, '2024-04-17 00:31:47', NULL),
+(8, 'DOUHA', 'BELARRAGUI', '2002-11-03', '', '', '', '2022-09-01', 'DOUHA.BELARRAGUI@edusync.ma', '$2y$10$XAijexiokMq8AeooE8gUeePUDbCSaf6/dkKzm0dFa1SxPMlL0KxuS', NULL, NULL, '2024-04-17 00:31:47', NULL),
+(9, 'HIND', 'BENMANSOUR', '2004-06-01', '', '', '', '2022-09-01', 'HIND.BENMANSOUR@edusync.ma', '$2y$10$XAijexiokMq8AeooE8gUeePUDbCSaf6/dkKzm0dFa1SxPMlL0KxuS', NULL, NULL, '2024-04-17 00:31:47', NULL),
+(10, 'HALIMA', 'BEZAIZ', '2004-01-04', '', '', '', '2022-09-01', 'HALIMA.BEZAIZ@edusync.ma', '$2y$10$XAijexiokMq8AeooE8gUeePUDbCSaf6/dkKzm0dFa1SxPMlL0KxuS', NULL, NULL, '2024-04-17 00:31:47', NULL),
+(11, 'OUSAMA', 'CHAFAI', '2001-09-16', '', '', '', '2022-09-01', 'OUSAMA.CHAFAI@edusync.ma', '$2y$10$XAijexiokMq8AeooE8gUeePUDbCSaf6/dkKzm0dFa1SxPMlL0KxuS', NULL, NULL, '2024-04-17 00:31:47', NULL),
+(12, 'MALIKA', 'DEHAIDEH', '2002-09-11', '', '', '', '2022-09-01', 'MALIKA.DEHAIDEH@edusync.ma', '$2y$10$XAijexiokMq8AeooE8gUeePUDbCSaf6/dkKzm0dFa1SxPMlL0KxuS', NULL, NULL, '2024-04-17 00:31:47', NULL),
+(13, 'FATIMA', 'EL HAOUZI', '2004-08-14', '', '', '', '2022-09-01', 'FATIMA.EL.HAOUZI@edusync.ma', '$2y$10$XAijexiokMq8AeooE8gUeePUDbCSaf6/dkKzm0dFa1SxPMlL0KxuS', NULL, NULL, '2024-04-17 00:31:47', NULL),
+(14, 'AYOUB', 'EL HOUANI', '2004-09-04', '', '', '', '2022-09-01', 'AYOUB.EL.HOUANI@edusync.ma', '$2y$10$XAijexiokMq8AeooE8gUeePUDbCSaf6/dkKzm0dFa1SxPMlL0KxuS', NULL, NULL, '2024-04-17 00:31:47', NULL),
+(15, 'OUMAIMA', 'EL KHOUDRI', '2000-04-15', '', '', '', '2022-09-01', 'OUMAIMA.EL.KHOUDRI@edusync.ma', '$2y$10$XAijexiokMq8AeooE8gUeePUDbCSaf6/dkKzm0dFa1SxPMlL0KxuS', NULL, NULL, '2024-04-17 00:31:47', NULL),
+(16, 'NOUREDDINE', 'ELRHALMI', '1998-01-22', '', '', '', '2022-09-01', 'NOUREDDINE.ELRHALMI@edusync.ma', '$2y$10$XAijexiokMq8AeooE8gUeePUDbCSaf6/dkKzm0dFa1SxPMlL0KxuS', NULL, NULL, '2024-04-17 00:31:47', NULL),
+(18, 'MAROUA', 'FRAINE', '2004-01-18', '', '', '', '2022-09-01', 'MAROUA.FRAINE@edusync.ma', '$2y$10$XAijexiokMq8AeooE8gUeePUDbCSaf6/dkKzm0dFa1SxPMlL0KxuS', NULL, NULL, '2024-04-17 00:31:47', NULL),
+(19, 'MOHAMED', 'JBAREK', '2004-10-29', '', '', '', '2022-09-01', 'MOHAMED.JBAREK@edusync.ma', '$2y$10$XAijexiokMq8AeooE8gUeePUDbCSaf6/dkKzm0dFa1SxPMlL0KxuS', NULL, NULL, '2024-04-17 00:31:47', NULL),
+(20, 'EL MEHDI', 'MEFTAH', '2003-04-14', '', '', '', '2022-09-01', 'EL.MEHDI.MEFTAH@edusync.ma', '$2y$10$XAijexiokMq8AeooE8gUeePUDbCSaf6/dkKzm0dFa1SxPMlL0KxuS', NULL, NULL, '2024-04-17 00:31:47', NULL),
+(21, 'CHOROUK', 'NIOUA', '2003-10-18', '', '', '', '2022-09-01', 'CHOROUK.NIOUA@edusync.ma', '$2y$10$XAijexiokMq8AeooE8gUeePUDbCSaf6/dkKzm0dFa1SxPMlL0KxuS', NULL, NULL, '2024-04-17 00:31:48', NULL),
+(22, 'MOHAMED', 'TALEB', '2003-09-05', '', '', '', '2022-09-01', 'MOHAMED.TALEB@edusync.ma', '$2y$10$XAijexiokMq8AeooE8gUeePUDbCSaf6/dkKzm0dFa1SxPMlL0KxuS', NULL, NULL, '2024-04-17 00:31:48', NULL),
+(23, 'WIDAD', 'TALEB', '2004-05-11', '', '', '', '2022-09-01', 'WIDAD.TALEB@edusync.ma', '$2y$10$XAijexiokMq8AeooE8gUeePUDbCSaf6/dkKzm0dFa1SxPMlL0KxuS', NULL, NULL, '2024-04-17 00:31:48', NULL),
+(24, 'FATIMA', 'AZHARI', '2002-05-11', '', '', '', '2022-09-01', 'FATIMA.AZHARI@edusync.ma', '$2y$10$XAijexiokMq8AeooE8gUeePUDbCSaf6/dkKzm0dFa1SxPMlL0KxuS', NULL, NULL, '2024-04-17 00:31:48', NULL),
+(25, 'MARYAM', 'AIT EL BAHLOUL', '2003-03-12', '', '', '', '2022-09-01', 'MARYAM.AIT.EL.BAHLOUL@edusync.ma', '$2y$10$XAijexiokMq8AeooE8gUeePUDbCSaf6/dkKzm0dFa1SxPMlL0KxuS', NULL, NULL, '2024-04-17 00:31:48', NULL);
 
 -- --------------------------------------------------------
 
@@ -909,7 +947,7 @@ ALTER TABLE `class`
 -- AUTO_INCREMENT for table `class_student`
 --
 ALTER TABLE `class_student`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=25;
 
 --
 -- AUTO_INCREMENT for table `class_teacher`
@@ -969,7 +1007,7 @@ ALTER TABLE `session`
 -- AUTO_INCREMENT for table `student`
 --
 ALTER TABLE `student`
-  MODIFY `student_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+  MODIFY `student_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=26;
 
 --
 -- AUTO_INCREMENT for table `student_homework`
