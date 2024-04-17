@@ -124,7 +124,7 @@ $app->post("/teacher/absent", function (Request $request, Response $response, ar
 
     if ($repo->registerAttendance($data)) {
       $msg['error'] = false;
-      $msg['message'] = "Registered successfully!";
+      $msg['message'] = "Absents registered successfully!";
       $status = 201;
     }
   }
