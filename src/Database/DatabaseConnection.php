@@ -14,6 +14,7 @@ class DatabaseConnection
             echo "Failed to connect " . mysqli_connect_error();
             return null;
         }
+        $this->con->set_charset("utf8");
         return $this->con;
     }
 }
