@@ -9,7 +9,7 @@ use App\Database\DatabaseConnection;
 class StudentRepository extends BaseRepository
 {
 
-  protected $showableFields = ['student_id', 'first_name', 'last_name', 'phone_number', 'fathers_name', 'mothers_name', 'join_date', 'email', "date_of_birth"];
+  protected $showableFields = ['student_id', 'first_name', 'last_name', 'phone_number', 'fathers_name', 'mothers_name', 'join_date', 'email', "date_of_birth", "gender"];
 
   protected $insertableFields = ['first_name', 'last_name', 'phone_number', 'fathers_name', 'mothers_name', 'join_date', 'email', "date_of_birth"];
 
