@@ -35,7 +35,8 @@ $app->post('/courses', function (Request $request, Response $response, $args) {
 $app->get('/courses', function (Request $request, Response $response) {
 
   $repo = new CourseRepository;
-  $courses = $repo->getCourseById();
+  $courses = $repo->fetchAll();
+
 
   return JsonResponse::send($response, $courses);
 });
