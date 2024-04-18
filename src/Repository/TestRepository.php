@@ -2,93 +2,34 @@
 
 namespace App\Repository;
 
+use App\Base\BaseRepository;
 use App\Database\DatabaseConnection;
 
-class TestRepository
+class TestRepository extends BaseRepository
 {
+    protected $showableFields = ['test_id', 'test_code', 'mark', 'student_id', 'course_id', 'created_at', 'updated_at'];
 
-    private $con;
+    protected $insertableFields = ['test_code', 'mark', 'student_id', 'course_id'];
+
+    protected $updatableFields = ['test_code', 'mark', 'student_id', 'course_id'];
+    protected $columnId = "test_id";
+
     function __construct()
     {
-        $db = new DatabaseConnection;
-
-        $this->con = $db->connect();
-    }
-    public function createTest($test_code, $mark, $student_id, $course_id)
-    {
-        if (!$this->isTestCodeExist($test_code)) {
-            $stmt = $this->con->prepare("INSERT INTO test (test_code, mark, student_id, course_id) VALUES (?, ?, ?, ?)");
-            $stmt->bind_param("ssss", $test_code, $mark, $student_id, $course_id);
-            if ($stmt->execute()) {
-                return TEST_CREATED;
-            } else {
-                return TEST_FAILURE;
-            }
-        }
-        return TEST_EXIST;
+        parent::__construct("test");
     }
 
 
-    public function getTestById($test_id = null)
+    public function getClassMarks($params)
     {
-        $where = "";
-        if ($test_id) {
-            $where = "WHERE test_id = ?";
-        }
-        $stmt = $this->con->prepare("SELECT test_id, test_code, mark, student_id, course_id FROM test $where");
-        if ($where != "") {
-            $stmt->bind_param("i", $test_id);
-        }
-        $stmt->execute();
-        if ($test_id) {
-            $stmt->bind_result($test_id, $test_code, $mark, $student_id, $course_id);
-            if ($stmt->fetch()) {
-                $test = array(
-                    'test_id' => $test_id,
-                    'test_code' => $test_code,
-                    'mark' => $mark,
-                    'student_id' => $student_id,
-                    'course_id' => $course_id
-                );
-                return $test;
-            }
-            return false;
-        } else {
-            $result = $stmt->get_result();
-            return $result->fetch_all(MYSQLI_ASSOC);
-        }
-    }
-
-    public function updateTest($test_id, $test_code, $mark, $student_id, $course_id)
-    {
-        $stmt = $this->con->prepare("UPDATE test SET test_code = ?, mark = ?, student_id = ?, course_id = ?, updated_at = CURRENT_TIMESTAMP WHERE test_id = ?");
-        $stmt->bind_param("ssssi", $test_code, $mark, $student_id, $course_id, $test_id);
-        $stmt->execute();
-        if ($stmt->affected_rows > 0) {
-            return true;
-        }
-        return false;
-    }
-
-    public function deleteTest($test_id)
-    {
-        $stmt = $this->con->prepare("DELETE FROM test WHERE test_id = ?");
-        $stmt->bind_param("i", $test_id);
-        $stmt->execute();
-        if ($stmt->affected_rows > 0) {
-            return true;
-        }
-        return false;
-    }
-
-
-    private function isTestCodeExist($test_code)
-    {
-        $stmt = $this->con->prepare("SELECT test_id FROM test WHERE test_code = ?");
-        $stmt->bind_param("s", $test_code);
-        $stmt->execute();
-        $stmt->store_result();
-        return $stmt->num_rows > 0;
+        $query = "SELECT test_id, student_id, 
+        GROUP_CONCAT(CONCAT(test_code, ':', mark) SEPARATOR ',') AS test_marks
+        FROM test
+        INNER JOIN class_student USING (student_id)
+        WHERE course_id = ? AND class_id = ?
+        GROUP BY student_id";
+        $stmt = $this->executeQuery($query, $params);
+        return $this->getAll($stmt);
     }
 
     public function getLatestTestsByStudentEmail($email)

@@ -10,6 +10,7 @@ use App\Repository\CourseRepository;
 use App\Repository\HomeworkRepository;
 use App\Repository\StudentRepository;
 use App\Repository\TeacherRepository;
+use App\Repository\TestRepository;
 use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
 
@@ -141,4 +142,63 @@ $app->get("/teacher/courses", function (Request $request, Response $response, ar
   $courses = $repo->getTeacherCourses($data->id);
 
   return JsonResponse::send($response, $courses);
+});
+
+$app->post("/teacher/tests", function (Request $request, Response $response, array $args) {
+
+  $body = $request->getParsedBody();
+
+  $repo = new TestRepository;
+
+  $msg['error'] = false;
+  $msg['message'] = "Something went wrong!";
+  $status = 422;
+
+  foreach ($body as $i) {
+    foreach ($i as $j) {
+      $j['test_code'] = $i;
+      if ($repo->create($j)) {
+        $msg['error'] = true;
+        $msg['message'] = "Test marks added successfully";
+        $status = 201;
+      }
+    }
+  }
+
+  return JsonResponse::send($response, $msg);
+});
+
+$app->put("/teacher/testnum/{classId}/{courseId}", function (Request $request, Response $response, array $args) {
+
+  $msg['error'] = true;
+  $msg['message'] = 'Something went wrong!';
+  $status = 422;
+
+  $token = str_replace("Bearer ", "", $request->getHeaderLine('Authorization'));
+  $data = JWTAuth::getData($token);
+
+  $classId = $args['classId'];
+  $courseId = $args['courseId'];
+
+  $body = $request->getParsedBody();
+
+  $repo = new ClassTeacherRepository;
+  $bol = $repo->addTestNumber($classId, $courseId, $data->id, $body['num_test']);
+  if ($bol) {
+    $msg['error'] = false;
+    $msg['message'] = 'Updated successfully!';
+    $status = 200;
+  }
+  return JsonResponse::send($response, $msg, $status);
+});
+
+$app->get("/teacher/tests/course/{courdId}/class/{classId}", function (Request $request, Response $response, array $args) {
+
+  $courseId = $args['courdId'];
+  $classId = $args['classId'];
+
+  $repo = new TestRepository;
+  $marks = $repo->getClassMarks([$courseId, $classId]);
+
+  return JsonResponse::send($response, $marks);
 });

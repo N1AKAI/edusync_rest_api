@@ -12,6 +12,18 @@ class ClassTeacherRepository extends BaseRepository
     parent::__construct('class_teacher');
   }
 
+  public function addTestNumber($classId, $courseId, $teacherId, $testsNum)
+  {
+    $query = "UPDATE class_teacher SET num_test = ? WHERE class_id = ? AND course_id = ? AND teacher_id = ?";
+    $params = [$testsNum, $classId, $courseId, $teacherId];
+    print_r($params);
+    $stmt = $this->executeQuery($query, $params);
+    if ($stmt->affected_rows > 0) {
+      return true;
+    }
+    return false;
+  }
+
   public function getCourseByClassId($class_id, $teacher_id)
   {
     $query = "SELECT course_id, course_name, course_code FROM `class_teacher`
