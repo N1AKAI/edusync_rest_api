@@ -1,5 +1,7 @@
 <?php
 
+use App\Common\JsonResponse;
+use App\Repository\CourseRepository;
 use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
 
@@ -10,124 +12,74 @@ $app->post('/courses', function (Request $request, Response $response, $args) {
     return $response->withStatus(422);
   }
 
-  $request_data = $request->getParsedBody();
+  $data = $request->getParsedBody();
 
-  $course_name = $request_data['course_name'];
-  $course_code = $request_data['course_code'];
-
-  $db = new DbOperationCourse();
-  $result = $db->createCourse($course_name, $course_code);
-
+  $db = new CourseRepository();
+  $result = $db->create($data);
+  $message = [];
   if ($result == COURSE_CREATED) {
     $message = [
       'error' => false,
       'message' => 'Course created successfully'
     ];
-    $response->getBody()->write(json_encode($message));
-    return $response
-      ->withHeader('Content-type', 'application/json')
-      ->withStatus(201);
   } elseif ($result == COURSE_FAILUARE) {
     $message = [
       'error' => true,
       'message' => 'Some error occurred'
     ];
-    $response->getBody()->write(json_encode($message));
-    return $response
-      ->withHeader('Content-type', 'application/json')
-      ->withStatus(422);
   }
+  return JsonResponse::send($response, $message);
 });
 
 // All Courses - GET  ✔️
 $app->get('/courses', function (Request $request, Response $response) {
 
-  $db = new DbOperationCourse;
-  $courses = $db->getCourseById();
-  $response_data = array();
-  $response_data['error'] = true;
-
-  if ($courses) {
-    $response_data['error'] = false;
-    $response_data['courses'] = $courses;
-  }
+  $repo = new CourseRepository;
+  $courses = $repo->fetchAll();
 
 
-  $response->getBody()->write(json_encode($response_data));
-  return $response
-    ->withHeader('Content-type', 'application/json')
-    ->withStatus(200);
+  return JsonResponse::send($response, $courses);
 });
 
 // Single Course - GET ✔️
 $app->get('/courses/{id}', function (Request $request, Response $response, array $args) {
+  $id = $args['id'];
 
-  $db = new DbOperationCourse;
-  $course = $db->getCourseById($args['id']);
-  $response_data = array();
-  $response_data['error'] = true;
+  $db = new CourseRepository;
+  $course = $db->fetch($id);
 
-  if ($course) {
-    $response_data['error'] = false;
-    $response_data['course'] = $course;
-  }
-
-  $response->getBody()->write(json_encode($response_data));
-  return $response
-    ->withHeader('Content-type', 'application/json')
-    ->withStatus(200);
+  return JsonResponse::send($response, $course);
 });
 
 // Update Course - PUT ✔️
 $app->put('/courses/{id}', function (Request $request, Response $response, array $args) {
 
   $course_id = $args['id'];
-  if (!haveEmptyParametrs(array('course_name', 'course_code'), $request, $response)) {
-    $request_data = $request->getParsedBody();
 
-    $course_name = $request_data['course_name'];
-    $course_code = $request_data['course_code'];
-
-    $db = new DbOperationCourse;
-    if ($db->updateCourse($course_name, $course_code, $course_id)) {
-
-      $response_data = array();
-      $response_data['error'] = false;
-      $response_data['message'] = 'Course updated Successfelly';
-      $course = $db->getCourseById($course_id);
-      $response_data['course'] = $course;
-      $response->getBody()->write(json_encode($response_data));
-      return $response
-        ->withHeader('Content-type', 'application/json')
-        ->withStatus(200);
-    } else {
-      $response_data = array();
-      $response_data['error'] = true;
-      $response_data['message'] = 'Please try agin later';
-
-      $response->getBody()->write(json_encode($response_data));
-      return $response
-        ->withHeader('Content-type', 'application/json')
-        ->withStatus(200);
-    }
+  $data = $request->getParsedBody();
+  $msg = [];
+  $db = new CourseRepository;
+  if ($db->update($course_id, $data)) {
+    $msg['error'] = false;
+    $msg['message'] = 'Course updated Successfelly';
+  } else {
+    $msg = array();
+    $msg['error'] = true;
+    $msg['message'] = 'Please try agin later';
   }
-  return $response
-    ->withHeader('Content-type', 'application/json')
-    ->withStatus(200);
+  return JsonResponse::send($response, $msg);
 });
+
 // Delete course - DELETE ✔️
 $app->delete('/courses/{id}', function (Request $request, Response $response, array $args) {
   $course_id = $args['id'];
-  $db = new DbOperationCourse;
-  if ($db->deleteCourse($course_id)) {
-    $response_data['error'] = false;
-    $response_data['message'] = 'Course has been deleted';
-  } else {
-    $response_data['error'] = true;
-    $response_data['message'] = 'Please try again later';
+  $db = new CourseRepository;
+
+  $msg['error'] = true;
+  $msg['message'] = 'Please try again later';
+  if ($db->delete($course_id)) {
+    $msg['error'] = false;
+    $msg['message'] = 'Course has been deleted';
   }
-  $response->getBody()->write(json_encode($response_data));
-  return $response
-    ->withHeader('Content-type', 'application/json')
-    ->withStatus(200);
+  return JsonResponse::send($response, $msg);
 });

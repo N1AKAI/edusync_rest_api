@@ -27,6 +27,17 @@ class CourseRepository extends BaseRepository
     }
   }
 
+  public function fetchAll()
+  {
+    $fields = implode(', ', array_values($this->showableFields));
+    $query = "SELECT $fields, branch_id, branch_name FROM {$this->table}
+    INNER JOIN branch_crouse USING (course_id)
+    INNER JOIN branch USING (branch_id)";
+    $stmt = $this->executeQuery($query);
+
+    return $this->getAll($stmt);
+  }
+
   public function getCourseById($course_id = null)
   {
     $where = "";

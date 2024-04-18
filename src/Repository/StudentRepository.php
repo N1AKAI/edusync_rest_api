@@ -3,8 +3,6 @@
 namespace App\Repository;
 
 use App\Base\BaseRepository;
-use App\Common\JsonResponse;
-use App\Database\DatabaseConnection;
 
 class StudentRepository extends BaseRepository
 {
