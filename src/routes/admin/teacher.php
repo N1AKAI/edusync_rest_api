@@ -144,7 +144,7 @@ $app->delete('/teachers/{id}', function (Request $request, Response $response, a
   if ($db->delete($id)) {
     $message['error'] = false;
     $message['message'] = 'Teacher has been deleted';
-    $status = 204;
+    $status = 201;
   }
   return JsonResponse::send($response, $message, $status);
 });

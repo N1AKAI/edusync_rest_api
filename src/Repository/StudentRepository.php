@@ -9,7 +9,7 @@ use App\Database\DatabaseConnection;
 class StudentRepository extends BaseRepository
 {
 
-  protected $showableFields = ['student_id', 'first_name', 'last_name', 'phone_number', 'fathers_name', 'mothers_name', 'join_date', 'email', "date_of_birth", 'created_at', 'updated_at'];
+  protected $showableFields = ['student_id', 'first_name', 'last_name', 'phone_number', 'fathers_name', 'mothers_name', 'join_date', 'email', "date_of_birth", "gender"];
 
   protected $insertableFields = ['first_name', 'last_name', 'phone_number', 'fathers_name', 'mothers_name', 'join_date', 'email', "date_of_birth"];
 
@@ -19,6 +19,15 @@ class StudentRepository extends BaseRepository
   function __construct()
   {
     parent::__construct("student");
+  }
+
+  public function fetchAll()
+  {
+    $fields = implode(', ', array_values($this->showableFields));
+    $query = "SELECT $fields, cs.class_id, c.class_name FROM {$this->table} INNER JOIN class_student cs USING (student_id) INNER JOIN class c USING (class_id) ORDER BY last_name";
+    $stmt = $this->executeQuery($query);
+
+    return $this->getAll($stmt);
   }
 
   public function createStudent($first_name, $last_name, $phone_number, $fathers_name, $mothers_name, $join_date, $email, $password)
