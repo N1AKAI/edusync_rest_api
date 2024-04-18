@@ -67,6 +67,17 @@ $app->get('/students', function (Request $request, Response $response) {
   return JsonResponse::send($response, $students);
 });
 
+// Single student - GET ✔️
+$app->get('/students/{id}', function (Request $request, Response $response, array $args) {
+
+  $id = $args['id'];
+
+  $db = new StudentRepository;
+  $student = $db->fetch($id);
+
+  return JsonResponse::send($response, $student);
+});
+
 // Update students - PUT ✔️
 $app->put('/students/{id}', function (Request $request, Response $response, array $args) {
 
