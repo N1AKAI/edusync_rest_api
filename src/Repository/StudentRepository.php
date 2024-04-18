@@ -24,7 +24,7 @@ class StudentRepository extends BaseRepository
   public function fetchAll()
   {
     $fields = implode(', ', array_values($this->showableFields));
-    $query = "SELECT $fields, cs.class_id, c.class_name FROM {$this->table} INNER JOIN class_student cs USING (student_id) INNER JOIN class c USING (class_id)";
+    $query = "SELECT $fields, cs.class_id, c.class_name FROM {$this->table} INNER JOIN class_student cs USING (student_id) INNER JOIN class c USING (class_id) ORDER BY last_name";
     $stmt = $this->executeQuery($query);
 
     return $this->getAll($stmt);
