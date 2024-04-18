@@ -1,5 +1,7 @@
 <?php
 
+use App\Common\JsonResponse;
+use App\Repository\ClassRepository;
 use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
 
@@ -19,7 +21,7 @@ $app->post('/classes', function (Request $request, Response $response, $args) {
   $teacher_id = $request_data['teacher_id'];
 
   $db = new DbOperationClass();
-  $result = $db->createClass($class_name, $year,$remarks,$teacher_id);
+  $result = $db->createClass($class_name, $year, $remarks, $teacher_id);
 
   if ($result == CLASS_CREATED) {
     $message = [
@@ -45,21 +47,10 @@ $app->post('/classes', function (Request $request, Response $response, $args) {
 // All Class - GET  
 $app->get('/classes', function (Request $request, Response $response) {
 
-  $db = new DbOperationClass;
-  $classes = $db->getClassById();
-  $response_data = array();
-  $response_data['error'] = true;
+  $repo = new ClassRepository;
+  $classes = $repo->index();
 
-  if ($classes) {
-    $response_data['error'] = false;
-    $response_data['classes'] = $classes;
-  }
-
-
-  $response->getBody()->write(json_encode($response_data));
-  return $response
-    ->withHeader('Content-type', 'application/json')
-    ->withStatus(200);
+  return JsonResponse::send($response, $classes);
 });
 
 // Single Class - GET 
@@ -67,7 +58,7 @@ $app->get('/classes/{id}', function (Request $request, Response $response, array
 
   $db = new DbOperationClass;
   $class = $db->getClassById($args['id']);
-  $response_data = array();
+  $response_data = array ();
   $response_data['error'] = true;
 
   if ($class) {
@@ -85,7 +76,7 @@ $app->get('/classes/{id}', function (Request $request, Response $response, array
 $app->put('/classes/{id}', function (Request $request, Response $response, array $args) {
 
   $class_id = $args['id'];
-  if (!haveEmptyParametrs(array( 'class_name', 'year', 'remarks', 'teacher_id' , 'class_id'), $request, $response)) {
+  if (!haveEmptyParametrs(array ('class_name', 'year', 'remarks', 'teacher_id', 'class_id'), $request, $response)) {
     $request_data = $request->getParsedBody();
 
     $class_name = $request_data['class_name'];
@@ -94,9 +85,9 @@ $app->put('/classes/{id}', function (Request $request, Response $response, array
     $teacher_id = $request_data['teacher_id'];
 
     $db = new DbOperationClass;
-    if ($db->updateClass($class_name, $year,$remarks,$teacher_id ,$class_id)) {
+    if ($db->updateClass($class_name, $year, $remarks, $teacher_id, $class_id)) {
 
-      $response_data = array();
+      $response_data = array ();
       $response_data['error'] = false;
       $response_data['message'] = 'Class updated Successfelly';
       $class = $db->getClassById($class_id);
@@ -106,7 +97,7 @@ $app->put('/classes/{id}', function (Request $request, Response $response, array
         ->withHeader('Content-type', 'application/json')
         ->withStatus(200);
     } else {
-      $response_data = array();
+      $response_data = array ();
       $response_data['error'] = true;
       $response_data['message'] = 'Please try agin later';
 

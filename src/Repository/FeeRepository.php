@@ -2,15 +2,20 @@
 
 namespace App\Repository;
 
+use App\Base\BaseRepository;
 use App\Database\DatabaseConnection;
 
-class FeeRepository
+class FeeRepository extends BaseRepository
 {
-    private $con;
+    protected $showableFields = ['fee_id', 'student_id', 'fee_description', 'total_fee', 'fee_date', 'is_paid'];
+
+    protected $insertableFields = ['student_id', 'fee_description', 'total_fee', 'fee_date', 'is_paid'];
+
+    protected $updatableFields = ['student_id', 'fee_description', 'total_fee', 'fee_date', 'is_paid'];
+    protected $columnId = "class_id";
     function __construct()
     {
-        $db = new DatabaseConnection;
-        $this->con = $db->connect();
+        parent::__construct('fee');
     }
 
     public function createFee($student_id, $fee_description, $total_fee, $fee_date, $is_paid)
@@ -88,5 +93,12 @@ class FeeRepository
             $fees[] = $row;
         }
         return $fees;
+    }
+
+    public function totalRevenue()
+    {
+        $query = "SELECT SUM(total_fee) as revenue FROM `fee` WHERE is_paid = 1";
+        $stmt = $this->executeQuery($query);
+        return $stmt->get_result()->fetch_assoc()['revenue'];
     }
 }

@@ -95,9 +95,9 @@ class BaseRepository
     $query = "SELECT $column FROM {$this->table} $where";
     $stmt = $this->executeQuery($query, $value);
     $stmt->store_result();
-    $stmt->bind_result($password);
+    $stmt->bind_result($col);
     $stmt->fetch();
-    return $password;
+    return $col;
   }
 
   public function fetchAll()
@@ -107,6 +107,16 @@ class BaseRepository
     $stmt = $this->executeQuery($query);
 
     return $this->getAll($stmt);
+  }
+
+  public function count($where = "", $value = [])
+  {
+    $query = "SELECT COUNT(*) as count FROM {$this->table} $where";
+    $stmt = $this->executeQuery($query, $value);
+    $stmt->store_result();
+    $stmt->bind_result($count);
+    $stmt->fetch();
+    return $count;
   }
 
   protected function getAll($stmt)

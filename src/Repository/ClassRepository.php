@@ -2,15 +2,31 @@
 
 namespace App\Repository;
 
+use App\Base\BaseRepository;
 use App\Database\DatabaseConnection;
 
-class ClassRepository
+class ClassRepository extends BaseRepository
 {
-  private $con;
+  protected $showableFields = ['class_id', 'branch_id', 'class', 'year', 'remarks', 'created_at', 'updated_at'];
+
+  protected $insertableFields = ['class', 'branch_id', 'year', 'remarks'];
+
+  protected $updatableFields = ['class', 'branch_id', 'year', 'remarks'];
+  protected $columnId = "class_id";
   function __construct()
   {
-    $db = new DatabaseConnection;
-    $this->con = $db->connect();
+    parent::__construct('class');
+  }
+
+  public function index()
+  {
+    $query = "SELECT class_id, branch_id, class_name, class_year, remarks, branch_name, COUNT(student_id) AS total_students, created_at, updated_at
+  FROM class c
+  INNER JOIN branch USING (branch_id)
+  LEFT JOIN class_student USING(class_id)
+  GROUP BY c.class_id";
+    $stmt = $this->executeQuery($query);
+    return $this->getAll($stmt);
   }
 
   public function createClass($class_name, $year, $remarks, $teacher_id)

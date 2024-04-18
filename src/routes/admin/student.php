@@ -1,5 +1,6 @@
 <?php
 
+use App\Common\JsonResponse;
 use App\Repository\StudentRepository;
 use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
@@ -7,7 +8,7 @@ use Psr\Http\Message\ServerRequestInterface as Request;
 // Create student - POST ✔️
 $app->post('/students', function (Request $request, Response $response, $args) {
 
-  $required_params = ['first_name', 'last_name',  'phone_number', 'fathers_name', 'mothers_name', 'join_date', 'email', 'password'];
+  $required_params = ['first_name', 'last_name', 'phone_number', 'fathers_name', 'mothers_name', 'join_date', 'email', 'password'];
   if (haveEmptyParametrs($required_params, $request, $response)) {
     return $response->withStatus(422);
   }
@@ -25,7 +26,7 @@ $app->post('/students', function (Request $request, Response $response, $args) {
   $hash_password = password_hash($password, PASSWORD_DEFAULT);
 
   $db = new StudentRepository();
-  $result = $db->createStudent($first_name, $last_name,  $phone_number,  $fathers_name, $mothers_name, $join_date, $email, $hash_password);
+  $result = $db->createStudent($first_name, $last_name, $phone_number, $fathers_name, $mothers_name, $join_date, $email, $hash_password);
 
   if ($result == STUDENT_CREATED) {
     $message = [
@@ -61,15 +62,9 @@ $app->post('/students', function (Request $request, Response $response, $args) {
 $app->get('/students', function (Request $request, Response $response) {
 
   $db = new StudentRepository;
-  $students = $db->getAllStudent();
-  $response_data = array();
-  $response_data['error'] = false;
-  $response_data['students'] = $students;
+  $students = $db->fetchAll();
 
-  $response->getBody()->write(json_encode($response_data));
-  return $response
-    ->withHeader('Content-type', 'application/json')
-    ->withStatus(200);
+  return JsonResponse::send($response, $students);
 });
 
 // Update students - PUT ✔️
@@ -77,8 +72,8 @@ $app->put('/students/{id}', function (Request $request, Response $response, arra
 
   $student_id = $args['id'];
   $status_code = 400;
-  if (!haveEmptyParametrs(array('first_name', 'last_name',  'phone_number', 'fathers_name', 'mothers_name', 'join_date'), $request, $response)) {
-    $response_data = array();
+  if (!haveEmptyParametrs(array ('first_name', 'last_name', 'phone_number', 'fathers_name', 'mothers_name', 'join_date'), $request, $response)) {
+    $response_data = array ();
     $response_data['error'] = true;
 
     $request_data = $request->getParsedBody();
@@ -90,7 +85,7 @@ $app->put('/students/{id}', function (Request $request, Response $response, arra
     $join_date = $request_data['join_date'];
 
     $db = new StudentRepository;
-    if ($db->updateStudent($first_name, $last_name,  $phone_number, $fathers_name, $mothers_name, $join_date, $student_id)) {
+    if ($db->updateStudent($first_name, $last_name, $phone_number, $fathers_name, $mothers_name, $join_date, $student_id)) {
       $response_data['error'] = false;
       $response_data['message'] = 'Student updated Successfelly';
       $status_code = 201;
@@ -108,7 +103,7 @@ $app->put('/students/{id}', function (Request $request, Response $response, arra
 // Update student password - POST ✔️
 $app->post('/student/password', function (Request $request, Response $response, array $args) {
 
-  if (!haveEmptyParametrs(array('password', 'new_password', 'email'), $request, $response)) {
+  if (!haveEmptyParametrs(array ('password', 'new_password', 'email'), $request, $response)) {
     $request_data = $request->getParsedBody();
     $currentpassword = $request_data['password'];
     $newpassword = $request_data['new_password'];
@@ -117,21 +112,21 @@ $app->post('/student/password', function (Request $request, Response $response, 
     $db = new StudentRepository;
     $result = $db->updatePasswordStudnt($currentpassword, $newpassword, $email);
     if ($result == PASSWORD_CHANGED) {
-      $response_data = array();
+      $response_data = array ();
       $response_data['error'] = false;
       $response_data['message'] = 'Password Changed';
       $response->getBody()->write(json_encode($response_data));
       return $response->withHeader('Content-type', 'application/json')
         ->withStatus(200);
     } else if ($result == PASSWORD_DO_NOT_MATCH) {
-      $response_data = array();
+      $response_data = array ();
       $response_data['error'] = true;
       $response_data['message'] = 'You have wrong password';
       $response->getBody()->write(json_encode($response_data));
       return $response->withHeader('Content-type', 'application/json')
         ->withStatus(200);
     } else if ($result == PASSWORD_NOT_CHANGED) {
-      $response_data = array();
+      $response_data = array ();
       $response_data['error'] = true;
       $response_data['message'] = 'Somme erreur accord';
       $response->getBody()->write(json_encode($response_data));

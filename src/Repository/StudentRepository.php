@@ -9,6 +9,13 @@ use App\Database\DatabaseConnection;
 class StudentRepository extends BaseRepository
 {
 
+  protected $showableFields = ['student_id', 'first_name', 'last_name', 'phone_number', 'fathers_name', 'mothers_name', 'join_date', 'email', "date_of_birth", 'created_at', 'updated_at'];
+
+  protected $insertableFields = ['first_name', 'last_name', 'phone_number', 'fathers_name', 'mothers_name', 'join_date', 'email', "date_of_birth"];
+
+  protected $updatableFields = ['first_name', 'last_name', 'phone_number', 'fathers_name', 'mothers_name', 'join_date', 'email', "date_of_birth"];
+  protected $columnId = "student_id";
+
   function __construct()
   {
     parent::__construct("student");
@@ -51,31 +58,6 @@ class StudentRepository extends BaseRepository
     $stmt->bind_result($password);
     $stmt->fetch();
     return $password;
-  }
-
-  public function getAllStudent()
-  {
-    $stmt = $this->con->prepare("SELECT student_id,first_name, last_name,  phone_number,fathers_name, mothers_name, join_date, email,created_at,updated_at
-        FROM student;");
-    $stmt->execute();
-    $stmt->bind_result($student_id, $first_name, $last_name, $phone_number, $fathers_name, $mothers_name, $join_date, $email, $created_at, $updated_at);
-    $students = array();
-    while ($stmt->fetch()) {
-      ;
-      $student = array();
-      $student['student_id'] = $student_id;
-      $student['first_name'] = $first_name;
-      $student['last_name'] = $last_name;
-      $student['phone_number'] = $phone_number;
-      $student['fathers_name'] = $fathers_name;
-      $student['mothers_name'] = $mothers_name;
-      $student['join_date'] = $join_date;
-      $student['email'] = $email;
-      $student['created_at'] = $created_at;
-      $student['updated_at'] = $updated_at;
-      array_push($students, $student);
-    }
-    return $students;
   }
   public function getStudentByEmail($email)
   {
