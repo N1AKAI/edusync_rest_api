@@ -27,7 +27,7 @@ $app->post('/teachers', function (Request $request, Response $response, $args) {
   } elseif ($result == TEACHER_EXIST) {
     $message = [
       'error' => false,
-      'message' => 'Teacher Already Exists'
+      'message' => 'Email already exsists'
     ];
     $status = 422;
   }
@@ -53,10 +53,8 @@ $app->post('/auth/teacher', function (Request $request, Response $response, $arg
     $message['message'] = 'Login is Successful';
     $message['teacher'] = $teacher;
     $status = 200;
-
   } else if ($result == TEACHER_NOT_FOUND) {
     $message['message'] = 'Invalid Email or Password';
-
   } else if ($result == TEACHER_PASSWORD_DO_NOT_MATCH) {
     $message['message'] = 'Invalid Email or Password';
   }

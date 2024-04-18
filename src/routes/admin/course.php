@@ -1,5 +1,6 @@
 <?php
 
+use App\Repository\CourseRepository;
 use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
 
@@ -15,7 +16,7 @@ $app->post('/courses', function (Request $request, Response $response, $args) {
   $course_name = $request_data['course_name'];
   $course_code = $request_data['course_code'];
 
-  $db = new DbOperationCourse();
+  $db = new CourseRepository();
   $result = $db->createCourse($course_name, $course_code);
 
   if ($result == COURSE_CREATED) {
@@ -42,7 +43,7 @@ $app->post('/courses', function (Request $request, Response $response, $args) {
 // All Courses - GET  ✔️
 $app->get('/courses', function (Request $request, Response $response) {
 
-  $db = new DbOperationCourse;
+  $db = new CourseRepository;
   $courses = $db->getCourseById();
   $response_data = array();
   $response_data['error'] = true;
@@ -62,7 +63,7 @@ $app->get('/courses', function (Request $request, Response $response) {
 // Single Course - GET ✔️
 $app->get('/courses/{id}', function (Request $request, Response $response, array $args) {
 
-  $db = new DbOperationCourse;
+  $db = new CourseRepository;
   $course = $db->getCourseById($args['id']);
   $response_data = array();
   $response_data['error'] = true;
@@ -88,7 +89,7 @@ $app->put('/courses/{id}', function (Request $request, Response $response, array
     $course_name = $request_data['course_name'];
     $course_code = $request_data['course_code'];
 
-    $db = new DbOperationCourse;
+    $db = new CourseRepository;
     if ($db->updateCourse($course_name, $course_code, $course_id)) {
 
       $response_data = array();
@@ -118,7 +119,7 @@ $app->put('/courses/{id}', function (Request $request, Response $response, array
 // Delete course - DELETE ✔️
 $app->delete('/courses/{id}', function (Request $request, Response $response, array $args) {
   $course_id = $args['id'];
-  $db = new DbOperationCourse;
+  $db = new CourseRepository;
   if ($db->deleteCourse($course_id)) {
     $response_data['error'] = false;
     $response_data['message'] = 'Course has been deleted';
