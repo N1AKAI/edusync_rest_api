@@ -16,7 +16,7 @@ class ClassTeacherRepository extends BaseRepository
   {
     $query = "UPDATE class_teacher SET num_test = ? WHERE class_id = ? AND course_id = ? AND teacher_id = ?";
     $params = [$testsNum, $classId, $courseId, $teacherId];
-    print_r($params);
+
     $stmt = $this->executeQuery($query, $params);
     if ($stmt->affected_rows > 0) {
       return true;
