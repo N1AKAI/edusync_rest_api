@@ -11,7 +11,7 @@ class StudentHomeworkRepository extends BaseRepository
   protected $insertableFields = ['homework_id', 'student_id'];
 
   protected $updatableFields = ['homework_id', 'student_id'];
-  protected $columnId = "homework_id";
+  protected $columnId = "student_homework";
 
   function __construct()
   {
