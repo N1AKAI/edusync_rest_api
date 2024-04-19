@@ -165,7 +165,7 @@ $app->post("/teacher/tests", function (Request $request, Response $response, arr
   return JsonResponse::send($response, $msg, $status);
 });
 
-$app->put("/teacher/tests/{testId}", function (Request $request, Response $response, array $args) {
+$app->post("/teacher/tests/update", function (Request $request, Response $response, array $args) {
   $body = $request->getParsedBody();
 
   $repo = new TestRepository;
