@@ -22,7 +22,7 @@ class TestRepository extends BaseRepository
     public function update($id, $data, $passwordField = "")
     {
         $query = "UPDATE {$this->table} SET mark = ? WHERE {$this->columnId} = ?";
-        $stmt = $this->executeQuery($query, $data);
+        $stmt = $this->executeQuery($query, [$data, $id]);
 
         return $stmt->affected_rows > 0;
     }

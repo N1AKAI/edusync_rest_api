@@ -175,8 +175,6 @@ $app->post("/teacher/tests/update", function (Request $request, Response $respon
   $status = 422;
 
   foreach ($body as $id => $mark) {
-    echo $id;
-    echo $mark;
     if ($repo->update($id, $mark)) {
       $msg['error'] = false;
       $msg['message'] = "Test marks updated successfully";
