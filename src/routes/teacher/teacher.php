@@ -173,7 +173,7 @@ $app->post("/teacher/tests/update", function (Request $request, Response $respon
   $msg['error'] = true;
   $msg['message'] = "Something went wrong!";
   $status = 422;
-
+  echo "################################";
   print_r($body[0]);
 
   foreach ($body as $id => $mark) {
