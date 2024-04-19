@@ -9,6 +9,7 @@ use App\Repository\ClassRepository;
 use App\Repository\FeeRepository;
 use App\Repository\HomeworkRepository;
 use App\Repository\QuestionRepository;
+use App\Repository\StudentHomeworkRepository;
 use App\Repository\StudentRepository;
 use App\Repository\TestOnlineRepository;
 use App\Repository\TestOnlineStudentRepository;
@@ -59,6 +60,49 @@ $app->get("/student/homeworks", function (Request $request, Response $response, 
   return $response
     ->withHeader('Content-type', 'application/json')
     ->withStatus(200);
+});
+
+$app->post("/student/homeworks", function (Request $request, Response $response, array $args) {
+
+  $token = str_replace("Bearer ", "", $request->getHeaderLine('Authorization'));
+  $data = JWTAuth::getData($token);
+
+  $reqData = $request->getParsedBody();
+  $reqData['student_id'] = $data->id;
+
+  $msg['error'] = true;
+  $msg['message'] = "Something went wrong!";
+  $status = 422;
+
+  $repo = new StudentHomeworkRepository();
+  if ($repo->create($reqData)) {
+    $msg['error'] = false;
+    $msg['message'] = "Checked successfully!";
+    $status = 201;
+  }
+
+  return JsonResponse::send($response, $msg, $status);
+});
+
+$app->delete("/student/homeworks/{id}", function (Request $request, Response $response, array $args) {
+
+  $token = str_replace("Bearer ", "", $request->getHeaderLine('Authorization'));
+  $data = JWTAuth::getData($token);
+
+  $id = $args['id'];
+
+  $msg['error'] = true;
+  $msg['message'] = "Something went wrong!";
+  $status = 422;
+
+  $repo = new StudentHomeworkRepository();
+  if ($repo->delete($id)) {
+    $msg['error'] = false;
+    $msg['message'] = "Unchecked successfully!";
+    $status = 201;
+  }
+
+  return JsonResponse::send($response, $msg, $status);
 });
 
 $app->get("/student/absents", function (Request $request, Response $response, array $args) {
