@@ -165,7 +165,7 @@ $app->post("/teacher/tests", function (Request $request, Response $response, arr
     }
   }
 
-  return JsonResponse::send($response, $msg);
+  return JsonResponse::send($response, $msg, $status);
 });
 
 $app->put("/teacher/testnum/{classId}/{courseId}", function (Request $request, Response $response, array $args) {

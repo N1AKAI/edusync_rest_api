@@ -22,7 +22,8 @@ class TestRepository extends BaseRepository
 
     public function getClassMarks($params)
     {
-        $query = "SELECT test_id, student_id, 
+        $query = "SELECT student_id,
+        GROUP_CONCAT(test_id SEPARATOR ',') AS test_ids,
         GROUP_CONCAT(CONCAT(test_code, ':', mark) SEPARATOR ',') AS test_marks
         FROM test
         INNER JOIN class_student USING (student_id)
