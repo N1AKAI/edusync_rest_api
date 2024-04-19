@@ -192,9 +192,9 @@ $app->put("/teacher/testnum/{classId}/{courseId}", function (Request $request, R
   return JsonResponse::send($response, $msg, $status);
 });
 
-$app->get("/teacher/tests/course/{courdId}/class/{classId}", function (Request $request, Response $response, array $args) {
+$app->get("/teacher/tests/course/{courseId}/class/{classId}", function (Request $request, Response $response, array $args) {
 
-  $courseId = $args['courdId'];
+  $courseId = $args['courseId'];
   $classId = $args['classId'];
 
   $repo = new TestRepository;
