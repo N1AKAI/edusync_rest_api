@@ -75,9 +75,10 @@ $app->post("/student/homeworks", function (Request $request, Response $response,
   $status = 422;
 
   $repo = new StudentHomeworkRepository();
-  if ($repo->create($reqData)) {
+  if ($id = $repo->create($reqData)) {
     $msg['error'] = false;
     $msg['message'] = "Checked successfully!";
+    $msg['id'] = $id;
     $status = 201;
   }
 

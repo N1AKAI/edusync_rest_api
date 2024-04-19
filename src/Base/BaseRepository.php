@@ -45,7 +45,7 @@ class BaseRepository
     $query = "INSERT INTO {$this->table} ($fields) VALUES ($placeholders)";
     $stmt = $this->executeQuery($query, $values);
 
-    return $stmt->affected_rows > 0;
+    return $stmt->insert_id;
   }
 
   public function update($id, $data, $passwordField = "")
