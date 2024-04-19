@@ -26,7 +26,7 @@ class AbsentStudentsRepository extends BaseRepository
 
   public function getStudentsAbsent($student_id)
   {
-    $query = "SELECT * FROM absent_students WHERE student_id = ?";
+    $query = "SELECT * FROM absent_students WHERE student_id = ? ORDER BY date DESC";
     $params = [$student_id];
     $stmt = $this->executeQuery($query, $params);
     return $this->getAll($stmt);
