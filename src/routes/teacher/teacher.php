@@ -150,21 +150,37 @@ $app->post("/teacher/tests", function (Request $request, Response $response, arr
 
   $repo = new TestRepository;
 
-  $msg['error'] = false;
+  $msg['error'] = true;
   $msg['message'] = "Something went wrong!";
   $status = 422;
 
-  foreach ($body as $i) {
-    foreach ($i as $j) {
-      $j['test_code'] = $i;
-      if ($repo->create($j)) {
-        $msg['error'] = true;
-        $msg['message'] = "Test marks added successfully";
-        $status = 201;
-      }
+  foreach ($body as $test) {
+    if ($repo->create($test)) {
+      $msg['error'] = false;
+      $msg['message'] = "Test marks added successfully";
+      $status = 201;
     }
   }
 
+  return JsonResponse::send($response, $msg, $status);
+});
+
+$app->put("/teacher/tests/{testId}", function (Request $request, Response $response, array $args) {
+  $body = $request->getParsedBody();
+
+  $repo = new TestRepository;
+
+  $msg['error'] = true;
+  $msg['message'] = "Something went wrong!";
+  $status = 422;
+
+  foreach ($body as $id => $test) {
+    if ($repo->update($id, $test)) {
+      $msg['error'] = false;
+      $msg['message'] = "Test marks updated successfully";
+      $status = 201;
+    }
+  }
   return JsonResponse::send($response, $msg, $status);
 });
 

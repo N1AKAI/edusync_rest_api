@@ -19,6 +19,14 @@ class TestRepository extends BaseRepository
         parent::__construct("test");
     }
 
+    public function update($id, $data, $passwordField = "")
+    {
+        $query = "UPDATE {$this->table} SET mark = ? WHERE {$this->columnId} = ?";
+        $stmt = $this->executeQuery($query, $data['mark']);
+
+        return $stmt->affected_rows > 0;
+    }
+
 
     public function getClassMarks($params)
     {
