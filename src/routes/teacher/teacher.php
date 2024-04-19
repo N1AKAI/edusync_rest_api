@@ -174,7 +174,8 @@ $app->post("/teacher/tests/update", function (Request $request, Response $respon
   $msg['message'] = "Something went wrong!";
   $status = 422;
   echo "################################";
-  print_r($body[0]);
+  print_r($body);
+  echo $body[15];
 
   foreach ($body as $id => $mark) {
     if ($repo->update($id, $mark)) {
