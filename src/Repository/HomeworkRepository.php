@@ -20,7 +20,7 @@ class HomeworkRepository extends BaseRepository
 
   public function getAllHomeWorkByStudent($student_id)
   {
-    $query = "SELECT homework.homework_id, homework, course_name, homework.created_at
+    $query = "SELECT homework.homework_id, homework, course_name, homework.created_at, student_homework.student_homework,
     CASE WHEN student_homework.student_id IS NOT NULL THEN true ELSE false END AS finished
     FROM homework
     INNER JOIN course USING (course_id)
