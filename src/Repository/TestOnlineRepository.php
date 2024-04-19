@@ -23,7 +23,7 @@ class TestOnlineRepository
     INNER JOIN class USING (class_id)
     INNER JOIN class_student USING (class_id)
     LEFT JOIN test_online_student USING (student_id)
-    WHERE student_id = 3
+    WHERE student_id = ?
     ORDER BY test_online.test_online_id DESC");
     $stmt->bind_param("i", $student_id);
     $stmt->execute();
