@@ -8,7 +8,7 @@ use App\Database\DatabaseConnection;
 class HomeworkRepository extends BaseRepository
 {
 
-  protected $showableFields = ['homework_id', 'class_id', 'teacher_id', 'course_id', 'homework', 'created_at', 'updated_at'];
+  protected $showableFields = ['homework_id', 'class_id', 'teacher_id', 'course_id', 'homework', 'description', 'created_at', 'updated_at'];
   protected $insertableFields = ['class_id', 'teacher_id', 'course_id', 'homework', 'description'];
   protected $updatableFields = ['class_id', 'teacher_id', 'course_id', 'homework',  'description'];
   protected $columnId = "homework_id";
@@ -20,7 +20,7 @@ class HomeworkRepository extends BaseRepository
 
   public function getAllHomeWorkByStudent($student_id)
   {
-    $query = "SELECT homework.homework_id, homework, course_name, homework.created_at, student_homework.student_homework,
+    $query = "SELECT homework.homework_id, homework, description, course_name, homework.created_at, student_homework.student_homework,
     CASE WHEN student_homework.student_id IS NOT NULL THEN true ELSE false END AS finished
     FROM homework
     INNER JOIN course USING (course_id)
